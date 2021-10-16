@@ -2,4 +2,9 @@
     <string name="app_name">MyApp</string>
     <string name="settings">Settings</string>
     <string name="weather">Weather</string>
+    <string name="london_weather">Weather in London</string>
+    <string name="enter_city_to_know_it_s_weather">Enter City To Know it\'s weather</string>
+    <string name="pick_one_city_below_to_know_it_s_weather">Pick one city below to know it\'s weather</string>
+    <string name="image_of_the_city">Image of the city</string>
+    <string name="temperature">20 \u2103</string>
 </resources>

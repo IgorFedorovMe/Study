@@ -1,10 +1,12 @@
 package me.igorfedorov.myapp.feature.weather_screen.di
 
+import me.igorfedorov.myapp.BuildConfig
 import me.igorfedorov.myapp.feature.weather_screen.data.api.WeatherApi
 import me.igorfedorov.myapp.feature.weather_screen.data.api.WeatherRemoteSource
 import me.igorfedorov.myapp.feature.weather_screen.data.api.WeatherRepository
 import me.igorfedorov.myapp.feature.weather_screen.data.api.WeatherRepositoryImpl
-import me.igorfedorov.myapp.feature.weather_screen.domain.WeatherInteractor
+import me.igorfedorov.myapp.feature.weather_screen.di.util.ApiKeyInterceptor
+import me.igorfedorov.myapp.feature.weather_screen.domain.use_case.get_weather_by_city_use_case.GetWeatherByCityUseCase
 import me.igorfedorov.myapp.feature.weather_screen.ui.WeatherScreenViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,6 +25,7 @@ val weatherModule = module {
 
     single<OkHttpClient>(named(OKHTTP_WEATHER)) {
         OkHttpClient.Builder()
+            .addInterceptor(ApiKeyInterceptor(BuildConfig.WEATHER_API_TOKEN))
             .addNetworkInterceptor(
                 HttpLoggingInterceptor()
                     .setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -50,14 +53,13 @@ val weatherModule = module {
         WeatherRepositoryImpl(get<WeatherRemoteSource>())
     }
 
-    factory<WeatherInteractor> {
-        WeatherInteractor(get<WeatherRepository>())
+    factory<GetWeatherByCityUseCase> {
+        GetWeatherByCityUseCase(get<WeatherRepository>())
     }
 
     viewModel<WeatherScreenViewModel>(named(VIEW_MODEL_WEATHER)) {
         WeatherScreenViewModel(
-            get<WeatherInteractor>()
+            get<GetWeatherByCityUseCase>()
         )
     }
-
 }

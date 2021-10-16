@@ -8,9 +8,13 @@ data class WeatherMainModel(
     @SerializedName("weather")
     val weatherModel: List<WeatherModel>,
     @SerializedName("base")
-    val base: String,
+    val baseModel: String,
     @SerializedName("main")
     val mainModel: MainModel,
     @SerializedName("name")
-    val name: String
+    val nameModel: String,
+    @SerializedName("wind")
+    val weatherWindModel: WeatherWindModel,
+    @SerializedName("sys")
+    val weatherSystemModel: WeatherSystemModel
 )

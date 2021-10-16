@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="me.igorfedorov.myapp.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_weatherScreenFragment"
+            app:destination="@id/weatherScreenFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsScreenFragment"
+            app:destination="@id/settingsScreenFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/weatherScreenFragment"
+        android:name="me.igorfedorov.myapp.feature.weather_screen.ui.WeatherScreenFragment"
+        android:label="WeatherScreenFragment"
+        tools:layout="@layout/fragment_weather_screen">
+        <argument
+            android:name="cityName"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsScreenFragment"
+        android:name="me.igorfedorov.myapp.feature.settings_screen.ui.SettingsScreenFragment"
+        android:label="SettingsScreenFragment"
+        tools:layout="@layout/fragment_settings_screen">
+        <action
+            android:id="@+id/action_settingsScreenFragment_to_weatherScreenFragment"
+            app:destination="@id/weatherScreenFragment"
+            app:popUpTo="@id/mainFragment" />
+    </fragment>
+
+
+</navigation>

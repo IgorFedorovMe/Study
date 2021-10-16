@@ -1,10 +1,12 @@
-package me.igorfedorov.myapp
+package me.igorfedorov.myapp.app
 
 import android.app.Application
-import me.igorfedorov.myapp.feature.weather_screen.di.appModule
+import me.igorfedorov.myapp.feature.settings_screen.di.settingsModule
+import me.igorfedorov.myapp.feature.weather_screen.di.weatherModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import timber.log.Timber
 
 class WeatherApplication : Application() {
 
@@ -14,8 +16,11 @@ class WeatherApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@WeatherApplication)
-            modules(appModule)
+            modules(weatherModule, settingsModule)
+
         }
+        // Plant Timber
+        Timber.plant(Timber.DebugTree())
     }
 
 }
