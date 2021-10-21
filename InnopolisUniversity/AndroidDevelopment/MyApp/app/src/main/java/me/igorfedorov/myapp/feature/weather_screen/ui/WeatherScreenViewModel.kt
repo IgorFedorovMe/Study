@@ -1,106 +1,83 @@
 package me.igorfedorov.myapp.feature.weather_screen.ui
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.location.Geocoder
-import android.location.Location
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import me.igorfedorov.myapp.common.Resource
+import me.igorfedorov.myapp.base.base_view_model.BaseViewModel
+import me.igorfedorov.myapp.base.base_view_model.Event
+import me.igorfedorov.myapp.feature.weather_screen.domain.WeatherInteractor
 import me.igorfedorov.myapp.feature.weather_screen.domain.model.WeatherMain
-import me.igorfedorov.myapp.feature.weather_screen.domain.use_case.get_weather_by_city_use_case.GetWeatherByCityUseCase
-import retrofit2.HttpException
-import java.io.IOException
 
 class WeatherScreenViewModel(
-    private val getWeatherByCityUseCase: GetWeatherByCityUseCase
-) : ViewModel() {
+    private val weatherInteractor: WeatherInteractor
+) : BaseViewModel<WeatherScreenState>() {
 
-    private val _weather = MutableStateFlow<Resource<List<WeatherMain>>>(Resource.Initialized())
-    val weather: StateFlow<Resource<List<WeatherMain>>>
-        get() = _weather
-
-    /*
-    Just a synthetic implementation
-    Proper way is to use DataStore for storing cityNames
-    Or even DataBase,
-    And to request weather on init block for each cityName stored
-    Putting them to weatherList, then emitting it to _weather
-    As data of Resource.Success()
-    * */
-    private val weatherList = mutableListOf<WeatherMain>()
-
-    fun requestWeatherByCity(cityName: String) {
-        if (cityIsInList(cityName)) return
-        viewModelScope.launch {
-            try {
-                _weather.emit(Resource.Loading())
-                val weather = getWeatherByCityUseCase(cityName)
-                weatherList.add(weather)
-                _weather.emit(Resource.Success(data = weatherList))
-            } catch (e: HttpException) {
-                _weather.emit(
-                    Resource.Error(
-                        message = e.localizedMessage ?: "An unexpected error occurred"
-                    )
-                )
-            } catch (e: IOException) {
-                _weather.emit(
-                    Resource.Error(
-                        message = e.localizedMessage
-                            ?: "Couldn't reach server. Check your internet connection"
-                    )
-                )
-            }
-        }
+    override fun initialViewState(): WeatherScreenState {
+        return WeatherScreenState(
+            weatherList = emptyList(),
+            weather = WeatherMain.empty,
+            isLoading = false,
+            errorMessage = null
+        )
     }
 
-    private fun cityIsInList(cityName: String): Boolean {
-        for (weather in weatherList) {
-            if (weather.name == cityName) {
-                return true
+    override suspend fun reduce(
+        event: Event,
+        previousState: WeatherScreenState
+    ): WeatherScreenState? {
+        when (event) {
+            is UIEvent.GetWeather -> {
+                processDataEvent(DataEvent.OnLoadDataTrue)
+                weatherInteractor.getWeatherByCity(event.cityName).fold(
+                    onError = {
+                        processDataEvent(DataEvent.ErrorWeatherRequest(it.localizedMessage ?: ""))
+                    },
+                    onSuccess = {
+                        processDataEvent(DataEvent.SuccessWeatherRequest(it))
+                    }
+                )
+                processDataEvent(DataEvent.OnLoadDataFalse)
+            }
+            is UIEvent.OnWeatherItemClick -> {
+
+            }
+            is UIEvent.DeleteWeatherFromList -> {
+                return previousState.copy(
+                    weatherList = previousState.weatherList - event.weather
+                )
+            }
+            is DataEvent.SuccessWeatherRequest -> {
+                if (!previousState.weatherList.contains(event.weather))
+                    return previousState.copy(
+                        weatherList = previousState.weatherList + event.weather
+                    )
+            }
+            is DataEvent.ErrorWeatherRequest -> {
+                return previousState.copy(
+                    errorMessage = event.errorMessage
+                )
+            }
+            is DataEvent.OnLoadDataTrue -> {
+                return previousState.copy(
+                    isLoading = true
+                )
+            }
+            is DataEvent.OnLoadDataFalse -> {
+                return previousState.copy(
+                    isLoading = false
+                )
             }
         }
-        return false
+        return null
+    }
+
+    fun requestWeatherByCity(cityName: String) {
+        processUiEvent(UIEvent.GetWeather(cityName))
     }
 
     fun deleteFromWeatherList(weatherMain: WeatherMain) {
-        viewModelScope.launch {
-            weatherList.remove(weatherMain)
-            val weatherList = _weather.value.data?.minus(weatherMain) ?: emptyList()
-            _weather.emit(Resource.Success(data = weatherList))
-        }
+        processUiEvent(UIEvent.DeleteWeatherFromList(weatherMain))
     }
 
-    @SuppressLint("MissingPermission")
-    fun getCurrentLocation(context: Context, cityName: String?) {
-        viewModelScope.launch {
-            LocationServices.getFusedLocationProviderClient(context)
-                .lastLocation
-                .addOnSuccessListener {
-                    requestWeatherByCity(
-                        cityName
-                            ?: getCityNameFromLocation(context, it)
-                    )
-                }
-        }
-    }
+    fun showMoreWeather(weatherMain: WeatherMain) {
 
-    private fun getCityNameFromLocation(context: Context, location: Location?): String {
-        return location?.let {
-            Geocoder(context).getFromLocation(
-                it.latitude,
-                it.longitude,
-                1
-            )
-                .first()
-                .locality
-        }
-            ?: ""
     }
 }
 

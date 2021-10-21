@@ -4,7 +4,7 @@ import me.igorfedorov.myapp.feature.settings_screen.data.api.CitiesApi
 import me.igorfedorov.myapp.feature.settings_screen.data.api.CitiesRemoteSource
 import me.igorfedorov.myapp.feature.settings_screen.data.api.CitiesRepository
 import me.igorfedorov.myapp.feature.settings_screen.data.api.CitiesRepositoryImpl
-import me.igorfedorov.myapp.feature.settings_screen.domain.use_case.get_cities_data.GetCitiesDataUseCase
+import me.igorfedorov.myapp.feature.settings_screen.domain.CitiesInteractor
 import me.igorfedorov.myapp.feature.settings_screen.ui.SettingsScreenViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -50,12 +50,12 @@ val settingsModule = module {
         CitiesRepositoryImpl(get<CitiesRemoteSource>())
     }
 
-    factory<GetCitiesDataUseCase> {
-        GetCitiesDataUseCase(get<CitiesRepository>())
+    single<CitiesInteractor> {
+        CitiesInteractor(get<CitiesRepository>())
     }
 
     viewModel<SettingsScreenViewModel>(named(VIEW_MODEL_SETTINGS)) {
-        SettingsScreenViewModel(get<GetCitiesDataUseCase>())
+        SettingsScreenViewModel(get<CitiesInteractor>())
     }
 
 }

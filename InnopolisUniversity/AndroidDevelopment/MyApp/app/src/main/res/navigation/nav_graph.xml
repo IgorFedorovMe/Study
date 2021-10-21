@@ -35,8 +35,7 @@
         tools:layout="@layout/fragment_settings_screen">
         <action
             android:id="@+id/action_settingsScreenFragment_to_weatherScreenFragment"
-            app:destination="@id/weatherScreenFragment"
-            app:popUpTo="@id/mainFragment" />
+            app:destination="@id/weatherScreenFragment" />
     </fragment>
 
 

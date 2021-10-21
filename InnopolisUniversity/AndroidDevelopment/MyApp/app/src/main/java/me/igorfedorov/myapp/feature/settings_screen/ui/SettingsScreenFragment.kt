@@ -11,13 +11,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import me.igorfedorov.myapp.R
-import me.igorfedorov.myapp.common.Resource
 import me.igorfedorov.myapp.common.autoCleared
 import me.igorfedorov.myapp.common.setAdapterAndCleanupOnDetachFromWindow
 import me.igorfedorov.myapp.common.textChangeFlow
@@ -55,41 +51,16 @@ class SettingsScreenFragment : Fragment(R.layout.fragment_settings_screen) {
 
         initAdapter()
 
-        observeViewModel()
+        screenViewModel.viewState.observe(viewLifecycleOwner, ::render)
 
     }
 
-    private fun observeViewModel() {
-        screenViewModel.citiesData.onEach {
-            updateProgressBarVisibility(it)
-            updateErrorTextViewVisibility(it)
-            when (it) {
-                is Resource.Success -> {
-                    viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                        cityDataAdapter.items = it.data
-                    }
-                }
-                is Resource.Error -> {
-                    cityDataAdapter.items = emptyList()
-                    binding.errorTextView.text = it.message
-                }
-                is Resource.Loading -> {
+    private fun render(settingsScreenState: SettingsScreenState) {
+        cityDataAdapter.items = settingsScreenState.cities
 
-                }
-                is Resource.Initialized -> {
-
-                }
-            }
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        binding.progressBarSettings.isVisible = settingsScreenState.isLoading
     }
 
-    private fun updateErrorTextViewVisibility(resource: Resource<List<CityData>>) {
-        binding.errorTextView.isVisible = resource is Resource.Error
-    }
-
-    private fun updateProgressBarVisibility(resource: Resource<List<CityData>>) {
-        binding.progressBarSettings.isVisible = resource is Resource.Loading
-    }
 
     private fun initFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -104,7 +75,7 @@ class SettingsScreenFragment : Fragment(R.layout.fragment_settings_screen) {
             setAdapterAndCleanupOnDetachFromWindow(cityDataAdapter)
             layoutManager = LinearLayoutManager(requireContext())
         }
-        cityDataAdapter.items = screenViewModel.citiesData.value.data
+        cityDataAdapter.items = screenViewModel.viewState.value?.cities
     }
 
     private fun onItemClick(cityData: CityData) {
