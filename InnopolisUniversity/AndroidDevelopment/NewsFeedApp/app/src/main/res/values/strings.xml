@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NewsFeedApp</string>
+    <string name="news_feed">News Feed</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="search_news">Search News</string>
+    <string name="article_s_image">Article\'s image</string>
+</resources>

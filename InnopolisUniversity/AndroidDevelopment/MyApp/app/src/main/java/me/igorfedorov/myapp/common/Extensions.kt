@@ -4,6 +4,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.onFailure
@@ -14,7 +15,7 @@ import me.igorfedorov.myapp.common.Constants.DEFAULT_THROTTLE_DELAY
 import timber.log.Timber
 import java.util.*
 
-fun View.setThrottledClickListener(delay: Long = 200L, onClick: (View) -> Unit) {
+fun View.setThrottledClickListener(delay: Long = DEFAULT_THROTTLE_DELAY, onClick: (View) -> Unit) {
     setOnClickListener {
         throttle(delay) {
             onClick(it)
@@ -81,6 +82,19 @@ fun EditText.setDebouncingTextListener(
         }
 
         override fun afterTextChanged(p0: Editable?) {
+        }
+    })
+}
+
+fun RecyclerView.setAdapterAndCleanupOnDetachFromWindow(recyclerViewAdapter: RecyclerView.Adapter<*>) {
+    adapter = recyclerViewAdapter
+    addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+        override fun onViewDetachedFromWindow(v: View?) {
+            adapter = null
+            removeOnAttachStateChangeListener(this)
+        }
+
+        override fun onViewAttachedToWindow(v: View?) {
         }
     })
 }

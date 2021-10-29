@@ -12,15 +12,20 @@ import me.igorfedorov.myapp.feature.settings_screen.domain.model.CityData
 class CityDataAdapter(onItemClick: (cityData: CityData) -> Unit) :
     AsyncListDifferDelegationAdapter<CityData>(CitiesDataDiffUtilCallback()) {
 
+    init {
+        delegatesManager.addDelegate(citiesDataAdapterDelegate(onItemClick))
+    }
+
     private fun citiesDataAdapterDelegate(onItemClick: (cityData: CityData) -> Unit) =
         adapterDelegateViewBinding<CityData, CityData, ItemCityDataBinding>(
             { layoutInflater, parent -> ItemCityDataBinding.inflate(layoutInflater, parent, false) }
         ) {
 
+            binding.root.setThrottledClickListener {
+                onItemClick(item)
+            }
+
             bind {
-                binding.root.setThrottledClickListener {
-                    onItemClick(item)
-                }
                 binding.apply {
                     cityTextView.text = item.city
                     countryTextView.text = item.city
@@ -30,14 +35,9 @@ class CityDataAdapter(onItemClick: (cityData: CityData) -> Unit) :
             }
         }
 
-    init {
-        delegatesManager.addDelegate(citiesDataAdapterDelegate(onItemClick))
-    }
-
-
     class CitiesDataDiffUtilCallback : DiffUtil.ItemCallback<CityData>() {
         override fun areItemsTheSame(oldItem: CityData, newItem: CityData): Boolean {
-            return false
+            return oldItem.name == newItem.name
         }
 
         override fun areContentsTheSame(oldItem: CityData, newItem: CityData): Boolean {
