@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import me.igorfedorov.kinonline.MainActivity
 import me.igorfedorov.kinonline.R
 import me.igorfedorov.kinonline.base.utils.setAdapterAndCleanupOnDetachFromWindow
 import me.igorfedorov.kinonline.base.utils.setData
@@ -28,12 +29,18 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private var movie: Movie? = null
 
+    private var viewForTransition: View? = null
+
     private val moviesAdapter: MoviesAdapter by lazy {
         MoviesAdapter(
             onItemClick = { movie, layoutPosition ->
                 this.movie = movie
                 binding.moviesListRecyclerView.scrollToPosition(layoutPosition)
                 viewModel.processUiEvent(UIEvent.OnMovieClick(movie))
+            },
+            onViewInflated = {
+                viewForTransition = it
+                it.transitionName = MainActivity.MOVIE_POSTER_TRANSITION
             }
         )
     }
@@ -75,5 +82,8 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     private fun setDataToAdapter(viewState: ViewState) {
         moviesAdapter.setData(viewState.movies)
     }
+
+    val sharedView
+        get() = viewForTransition
 
 }

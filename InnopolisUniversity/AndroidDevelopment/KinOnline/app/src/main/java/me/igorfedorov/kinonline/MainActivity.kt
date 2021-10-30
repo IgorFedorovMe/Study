@@ -1,6 +1,7 @@
 package me.igorfedorov.kinonline
 
 import android.os.Bundle
+import android.transition.ChangeBounds
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val BUNDLE_SCREEN_KEY = "BUNDLE_SCREEN_KEY"
+        const val MOVIE_POSTER_TRANSITION = "MOVIE_POSTER_TRANSITION"
     }
 
     private var currentScreen: String? = null
@@ -52,7 +54,11 @@ class MainActivity : AppCompatActivity() {
             nextFragment: Fragment
         ) {
             if (currentFragment is MoviesListFragment && nextFragment is MovieInfoFragment)
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE)
+                setupSharedElementForMoviesListToMovieInfo(
+                    currentFragment,
+                    nextFragment,
+                    fragmentTransaction
+                )
         }
     }
 
@@ -97,5 +103,19 @@ class MainActivity : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun setupSharedElementForMoviesListToMovieInfo(
+        moviesListFragment: MoviesListFragment,
+        movieInfoFragment: MovieInfoFragment,
+        fragmentTransaction: FragmentTransaction
+    ) {
+        val changeBounds = ChangeBounds()
+        movieInfoFragment.sharedElementEnterTransition = changeBounds
+        movieInfoFragment.sharedElementReturnTransition = changeBounds
+        moviesListFragment.sharedElementEnterTransition = changeBounds
+        moviesListFragment.sharedElementReturnTransition = changeBounds
+        val view = moviesListFragment.sharedView
+        fragmentTransaction.addSharedElement(view!!, MOVIE_POSTER_TRANSITION)
     }
 }

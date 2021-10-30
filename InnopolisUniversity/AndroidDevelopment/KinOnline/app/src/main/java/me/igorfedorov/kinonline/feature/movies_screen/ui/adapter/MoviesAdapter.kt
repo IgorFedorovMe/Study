@@ -1,6 +1,7 @@
 package me.igorfedorov.kinonline.feature.movies_screen.ui.adapter
 
 import android.annotation.SuppressLint
+import android.view.View
 import androidx.recyclerview.widget.DiffUtil
 import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
@@ -11,18 +12,24 @@ import me.igorfedorov.kinonline.databinding.ItemMovieBinding
 import me.igorfedorov.kinonline.feature.movies_screen.domain.model.Movie
 
 class MoviesAdapter(
-    onItemClick: (movie: Movie, layoutPosition: Int) -> Unit
+    onItemClick: (movie: Movie, layoutPosition: Int) -> Unit,
+    onViewInflated: (View) -> Unit
 ) : AsyncListDifferDelegationAdapter<Movie>(MoviesDiffUtilCallback()) {
 
     init {
-        delegatesManager.addDelegate(movieAdapterDelegate(onItemClick))
+        delegatesManager.addDelegate(movieAdapterDelegate(onItemClick, onViewInflated))
     }
 
     @SuppressLint("CheckResult")
-    private fun movieAdapterDelegate(onItemClick: (movie: Movie, layoutPosition: Int) -> Unit) =
+    private fun movieAdapterDelegate(
+        onItemClick: (movie: Movie, layoutPosition: Int) -> Unit,
+        onViewInflated: (View) -> Unit
+    ) =
         adapterDelegateViewBinding<Movie, Movie, ItemMovieBinding>(
             { layoutInflater, parent -> ItemMovieBinding.inflate(layoutInflater, parent, false) }
         ) {
+
+            onViewInflated(itemView)
 
             binding.root.setThrottledClickListener {
                 onItemClick(item, layoutPosition)

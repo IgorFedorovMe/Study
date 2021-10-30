@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
+import me.igorfedorov.kinonline.MainActivity
 import me.igorfedorov.kinonline.R
 import me.igorfedorov.kinonline.base.cicerone_navigation.utils.startAnimation
 import me.igorfedorov.kinonline.base.utils.loadImage
@@ -20,6 +21,8 @@ class MovieInfoFragment : Fragment(R.layout.fragment_movie_info) {
 
     companion object {
         private const val MOVIE_KEY = "MOVIE_KEY"
+
+        private const val ARG_ANIM_DESTINATION = "ARG_ANIM_DESTINATION"
 
         fun newInstance(movie: Movie) = MovieInfoFragment().apply {
             arguments = bundleOf(Pair(MOVIE_KEY, movie))
@@ -45,6 +48,7 @@ class MovieInfoFragment : Fragment(R.layout.fragment_movie_info) {
 
         binding.apply {
             moviePosterImageView.loadImage(movie.posterUrl)
+            moviePosterImageView.transitionName = MainActivity.MOVIE_POSTER_TRANSITION
             titleTextView.text = movie.title
             descriptionTextView.text = movie.overview
             playMovieFab.setThrottledClickListener {
