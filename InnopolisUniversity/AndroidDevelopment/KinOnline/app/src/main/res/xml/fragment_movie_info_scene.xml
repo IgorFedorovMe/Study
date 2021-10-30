@@ -79,6 +79,7 @@
             android:id="@+id/circle"
             android:layout_width="128dp"
             android:layout_height="56dp"
+            android:visibility="invisible"
             motion:layout_constraintBottom_toBottomOf="@+id/playMovieFab"
             motion:layout_constraintEnd_toEndOf="@+id/playMovieFab" />
     </ConstraintSet>
