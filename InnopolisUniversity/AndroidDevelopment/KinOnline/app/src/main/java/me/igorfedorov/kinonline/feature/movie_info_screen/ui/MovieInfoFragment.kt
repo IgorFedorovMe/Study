@@ -22,8 +22,6 @@ class MovieInfoFragment : Fragment(R.layout.fragment_movie_info) {
     companion object {
         private const val MOVIE_KEY = "MOVIE_KEY"
 
-        private const val ARG_ANIM_DESTINATION = "ARG_ANIM_DESTINATION"
-
         fun newInstance(movie: Movie) = MovieInfoFragment().apply {
             arguments = bundleOf(Pair(MOVIE_KEY, movie))
         }
