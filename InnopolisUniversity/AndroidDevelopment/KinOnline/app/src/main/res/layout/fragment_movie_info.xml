@@ -51,8 +51,8 @@
     <TextView
         android:id="@+id/descriptionTextView"
         style="@style/H5Heading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:ellipsize="end"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"

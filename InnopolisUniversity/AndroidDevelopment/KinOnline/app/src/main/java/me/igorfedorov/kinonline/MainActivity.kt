@@ -4,10 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.github.terrakok.cicerone.Command
-import com.github.terrakok.cicerone.Navigator
-import com.github.terrakok.cicerone.NavigatorHolder
-import com.github.terrakok.cicerone.Router
+import com.github.terrakok.cicerone.*
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import me.igorfedorov.kinonline.base.cicerone_navigation.Screens
@@ -18,11 +15,28 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
 
+    private var currentScreen: String? = null
+
     private val navigatorHolder by inject<NavigatorHolder>()
 
     private val navigator: Navigator = object : AppNavigator(this, R.id.fragmentContainerView) {
         override fun applyCommands(commands: Array<out Command>) {
             super.applyCommands(commands)
+            commands.forEach { command ->
+                when (command) {
+                    is Forward -> {
+                        currentScreen = command.screen.screenKey
+                    }
+                    is Replace -> {
+                        currentScreen = command.screen.screenKey
+                    }
+                    is BackTo -> {
+                        currentScreen = command.screen?.screenKey ?: ""
+                    }
+                    is Back -> {
+                    }
+                }
+            }
             supportFragmentManager.executePendingTransactions()
         }
 
@@ -45,7 +59,15 @@ class MainActivity : AppCompatActivity() {
 
         navigatorHolder.setNavigator(navigator)
 
-        router.newRootScreen(Screens.moviesList())
+        if (savedInstanceState != null) {
+
+        } else {
+            router.newRootScreen(Screens.MoviesList)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
     }
 
     override fun onResumeFragments() {

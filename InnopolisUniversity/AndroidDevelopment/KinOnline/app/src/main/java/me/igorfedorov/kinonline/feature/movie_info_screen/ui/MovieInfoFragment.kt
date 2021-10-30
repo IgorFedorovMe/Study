@@ -74,5 +74,4 @@ class MovieInfoFragment : Fragment(R.layout.fragment_movie_info) {
             }
         }
     }
-
 }

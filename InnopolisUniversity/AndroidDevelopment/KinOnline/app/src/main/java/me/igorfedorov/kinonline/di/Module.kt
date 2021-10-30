@@ -58,7 +58,7 @@ val ciceroneModule = module {
 
 val exoPlayerModule = module {
 
-    single<ExoPlayer> {
+    factory<ExoPlayer> {
         SimpleExoPlayer.Builder(androidApplication()).build()
     }
 

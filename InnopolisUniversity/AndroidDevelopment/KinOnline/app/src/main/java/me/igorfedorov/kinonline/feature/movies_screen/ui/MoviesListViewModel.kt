@@ -33,7 +33,7 @@ class MoviesListViewModel(
                 )
             }
             is UIEvent.OnMovieClick -> {
-                router.navigateTo(Screens.movieInfo(event.movie))
+                router.navigateTo(Screens.MovieInfo(event.movie))
             }
             is DataEvent.SuccessMoviesRequest -> {
                 return previousState.copy(movies = event.movies, errorMessage = null)

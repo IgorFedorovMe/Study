@@ -19,7 +19,7 @@ class MovieInfoViewModel(
                 return previousState.copy(animation = event.animation)
             }
             is UIEvent.NavigateToVideoPlayerScreen -> {
-                router.navigateTo(Screens.playerFragment(event.movieUrl))
+                router.navigateTo(Screens.PlayerFragment(event.movieUrl))
                 return previousState.copy(animation = null)
             }
         }
