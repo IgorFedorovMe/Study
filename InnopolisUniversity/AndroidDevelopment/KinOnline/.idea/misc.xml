@@ -9,6 +9,7 @@
         <entry key="app/src/main/res/layout/fragment_movies_list.xml" value="0.5493934142114385" />
         <entry key="app/src/main/res/layout/fragment_video_player.xml" value="0.5796875" />
         <entry key="app/src/main/res/layout/item_movie.xml" value="0.5796875" />
+        <entry key="app/src/main/res/xml/network_security_config.xml" value="0.5796875" />
       </map>
     </option>
   </component>
