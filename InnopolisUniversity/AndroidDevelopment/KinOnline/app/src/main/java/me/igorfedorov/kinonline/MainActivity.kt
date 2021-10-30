@@ -16,6 +16,10 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        private const val BUNDLE_SCREEN_KEY = "BUNDLE_SCREEN_KEY"
+    }
+
     private var currentScreen: String? = null
 
     private val navigatorHolder by inject<NavigatorHolder>()
@@ -61,8 +65,8 @@ class MainActivity : AppCompatActivity() {
         navigatorHolder.setNavigator(navigator)
 
         if (savedInstanceState != null) {
-            val movie = savedInstanceState.getParcelable<Movie>("movie")
-            if (movie != null && savedInstanceState.getString("screen") == Screens.MOVIE_INFO_SCREEN)
+            val movie = savedInstanceState.getParcelable<Movie>(MoviesListFragment.BUNDLE_MOVIE_KEY)
+            if (movie != null && savedInstanceState.getString(BUNDLE_SCREEN_KEY) == Screens.MOVIE_INFO_SCREEN)
                 router.navigateTo(Screens.MovieInfo(movie))
         } else {
             router.newRootScreen(Screens.MoviesList)
@@ -71,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("movie", currentScreen)
+        outState.putString(BUNDLE_SCREEN_KEY, currentScreen)
     }
 
     override fun onResumeFragments() {

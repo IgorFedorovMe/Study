@@ -17,6 +17,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     companion object {
+        const val BUNDLE_MOVIE_KEY = "BUNDLE_MOVIE_KEY"
 
         fun newInstance() = MoviesListFragment()
     }
@@ -25,7 +26,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private val viewModel: MoviesListViewModel by viewModel()
 
-    private lateinit var movie: Movie
+    private var movie: Movie? = null
 
     private val moviesAdapter: MoviesAdapter by lazy {
         MoviesAdapter(
@@ -63,7 +64,8 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable("movie", movie)
+        movie?.let { outState.putParcelable(BUNDLE_MOVIE_KEY, it) }
+
     }
 
     private fun updateProgressBar(viewState: ViewState) {
