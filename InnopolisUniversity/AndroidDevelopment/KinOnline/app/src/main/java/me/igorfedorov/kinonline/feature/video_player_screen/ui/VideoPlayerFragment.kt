@@ -3,6 +3,9 @@ package me.igorfedorov.kinonline.feature.video_player_screen.ui
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.exoplayer2.ExoPlayer
@@ -40,6 +43,7 @@ class VideoPlayerFragment : Fragment(R.layout.fragment_video_player) {
 
     override fun onStart() {
         super.onStart()
+        hideSystemUi()
         if (Util.SDK_INT >= 24) {
             initializePlayer()
         }
@@ -47,6 +51,7 @@ class VideoPlayerFragment : Fragment(R.layout.fragment_video_player) {
 
     override fun onResume() {
         super.onResume()
+        hideSystemUi()
         if ((Util.SDK_INT < 24)) {
             initializePlayer()
         }
@@ -87,6 +92,18 @@ class VideoPlayerFragment : Fragment(R.layout.fragment_video_player) {
         super.onStop()
         if (Util.SDK_INT >= 24) {
             releasePlayer()
+        }
+    }
+
+    private fun hideSystemUi() {
+        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+        WindowInsetsControllerCompat(
+            requireActivity().window,
+            binding.videoPlayerView
+        ).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
     }
 }
