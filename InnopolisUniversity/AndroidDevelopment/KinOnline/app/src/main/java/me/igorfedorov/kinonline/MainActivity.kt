@@ -10,6 +10,7 @@ import com.github.terrakok.cicerone.androidx.FragmentScreen
 import me.igorfedorov.kinonline.base.cicerone_navigation.Screens
 import me.igorfedorov.kinonline.base.cicerone_navigation.common.BackButtonListener
 import me.igorfedorov.kinonline.feature.movie_info_screen.ui.MovieInfoFragment
+import me.igorfedorov.kinonline.feature.movies_screen.domain.model.Movie
 import me.igorfedorov.kinonline.feature.movies_screen.ui.MoviesListFragment
 import org.koin.android.ext.android.inject
 
@@ -60,7 +61,9 @@ class MainActivity : AppCompatActivity() {
         navigatorHolder.setNavigator(navigator)
 
         if (savedInstanceState != null) {
-
+            val movie = savedInstanceState.getParcelable<Movie>("movie")
+            if (movie != null && savedInstanceState.getString("screen") == Screens.MOVIE_INFO_SCREEN)
+                router.navigateTo(Screens.MovieInfo(movie))
         } else {
             router.newRootScreen(Screens.MoviesList)
         }
@@ -68,6 +71,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putString("movie", currentScreen)
     }
 
     override fun onResumeFragments() {

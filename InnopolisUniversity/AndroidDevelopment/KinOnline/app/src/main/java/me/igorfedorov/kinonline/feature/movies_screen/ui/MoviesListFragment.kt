@@ -10,6 +10,7 @@ import me.igorfedorov.kinonline.R
 import me.igorfedorov.kinonline.base.utils.setAdapterAndCleanupOnDetachFromWindow
 import me.igorfedorov.kinonline.base.utils.setData
 import me.igorfedorov.kinonline.databinding.FragmentMoviesListBinding
+import me.igorfedorov.kinonline.feature.movies_screen.domain.model.Movie
 import me.igorfedorov.kinonline.feature.movies_screen.ui.adapter.MoviesAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -24,9 +25,12 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private val viewModel: MoviesListViewModel by viewModel()
 
+    private lateinit var movie: Movie
+
     private val moviesAdapter: MoviesAdapter by lazy {
         MoviesAdapter(
             onItemClick = { movie, layoutPosition ->
+                this.movie = movie
                 binding.moviesListRecyclerView.scrollToPosition(layoutPosition)
                 viewModel.processUiEvent(UIEvent.OnMovieClick(movie))
             }
@@ -55,6 +59,11 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         setDataToAdapter(viewState)
 
         updateProgressBar(viewState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable("movie", movie)
     }
 
     private fun updateProgressBar(viewState: ViewState) {

@@ -10,22 +10,37 @@ import me.igorfedorov.kinonline.feature.video_player_screen.ui.VideoPlayerFragme
 
 sealed class Screens : FragmentScreen {
 
+    companion object ScreenKey {
+        const val MOVIE_LIST_SCREEN = "MOVIE_LIST_SCREEN"
+        const val MOVIE_INFO_SCREEN = "MOVIE_INFO_SCREEN"
+        const val PLAYER_FRAGMENT_SCREEN = "PLAYER_FRAGMENT_SCREEN"
+    }
+
     object MoviesList : Screens() {
         override fun createFragment(factory: FragmentFactory): Fragment {
             return MoviesListFragment.newInstance()
         }
+
+        override val screenKey: String
+            get() = MOVIE_LIST_SCREEN
     }
 
     data class MovieInfo(val movie: Movie) : Screens() {
         override fun createFragment(factory: FragmentFactory): Fragment {
             return MovieInfoFragment.newInstance(movie)
         }
+
+        override val screenKey: String
+            get() = MOVIE_INFO_SCREEN
     }
 
     data class PlayerFragment(val movieUrl: String) : Screens() {
         override fun createFragment(factory: FragmentFactory): Fragment {
             return VideoPlayerFragment.newInstance(movieUrl)
         }
+
+        override val screenKey: String
+            get() = PLAYER_FRAGMENT_SCREEN
 
     }
 
