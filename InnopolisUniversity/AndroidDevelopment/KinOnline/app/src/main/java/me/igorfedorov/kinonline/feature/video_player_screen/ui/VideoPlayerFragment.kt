@@ -83,6 +83,7 @@ class VideoPlayerFragment : Fragment(R.layout.fragment_video_player) {
 
     override fun onPause() {
         super.onPause()
+        showSystemUi()
         if (Util.SDK_INT < 24) {
             releasePlayer()
         }
@@ -90,6 +91,7 @@ class VideoPlayerFragment : Fragment(R.layout.fragment_video_player) {
 
     override fun onStop() {
         super.onStop()
+        showSystemUi()
         if (Util.SDK_INT >= 24) {
             releasePlayer()
         }
@@ -105,5 +107,17 @@ class VideoPlayerFragment : Fragment(R.layout.fragment_video_player) {
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
+    }
+
+    private fun showSystemUi() {
+        WindowCompat.setDecorFitsSystemWindows(
+            requireActivity().window,
+            true
+        )
+
+        WindowInsetsControllerCompat(
+            requireActivity().window,
+            binding.videoPlayerView
+        ).show(WindowInsetsCompat.Type.systemBars())
     }
 }
