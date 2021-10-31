@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutDescription="@xml/fragment_movie_info_scene_portrait">
+    app:layoutDescription="@xml/fragment_movie_info_scene_landscape">
 
     <ImageView
         android:id="@+id/moviePosterImageView"
