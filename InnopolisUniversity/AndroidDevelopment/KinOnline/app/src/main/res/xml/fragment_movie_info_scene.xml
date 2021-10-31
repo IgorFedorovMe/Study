@@ -38,6 +38,13 @@
             motion:layout_constraintStart_toStartOf="@+id/moviePosterImageView"
             motion:layout_constraintTop_toBottomOf="@+id/moviePosterImageView" />
         <Constraint
+            android:id="@+id/circle"
+            android:layout_width="128dp"
+            android:layout_height="56dp"
+            android:visibility="invisible"
+            motion:layout_constraintBottom_toBottomOf="@+id/playMovieFab"
+            motion:layout_constraintEnd_toEndOf="@+id/playMovieFab" />
+        <Constraint
             android:id="@+id/descriptionTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
