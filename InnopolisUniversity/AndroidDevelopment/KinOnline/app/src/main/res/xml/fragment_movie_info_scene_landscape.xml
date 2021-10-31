@@ -59,9 +59,11 @@
     <ConstraintSet android:id="@+id/end">
         <Constraint
             android:id="@+id/titleTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toEndOf="@+id/moviePosterImageView"
             motion:layout_constraintTop_toTopOf="@+id/moviePosterImageView" />
         <Constraint
