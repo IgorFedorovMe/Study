@@ -12,7 +12,7 @@ class MoviesListViewModel(
 ) : BaseViewModel<ViewState>() {
 
     init {
-        processUiEvent(UIEvent.OnGetMovies)
+        processUiEvent(UIEvent.GetMovies)
     }
 
     override fun initialViewState(): ViewState = ViewState(
@@ -22,7 +22,8 @@ class MoviesListViewModel(
 
     override suspend fun reduce(event: Event, previousState: ViewState): ViewState? {
         when (event) {
-            is UIEvent.OnGetMovies -> {
+            is UIEvent.GetMovies -> {
+                processDataEvent(DataEvent.ResetViewState)
                 moviesInteractor.getAllMovies().fold(
                     onError = {
                         processDataEvent(DataEvent.ErrorMoviesRequest(it.localizedMessage ?: ""))
@@ -36,10 +37,13 @@ class MoviesListViewModel(
                 router.navigateTo(Screens.MovieInfo(event.movie))
             }
             is DataEvent.SuccessMoviesRequest -> {
-                return previousState.copy(movies = event.movies, errorMessage = null)
+                return previousState.copy(movies = event.movies)
             }
             is DataEvent.ErrorMoviesRequest -> {
                 return previousState.copy(errorMessage = event.errorMessage, movies = emptyList())
+            }
+            is DataEvent.ResetViewState -> {
+                return previousState.copy(movies = emptyList(), errorMessage = null)
             }
         }
         return null

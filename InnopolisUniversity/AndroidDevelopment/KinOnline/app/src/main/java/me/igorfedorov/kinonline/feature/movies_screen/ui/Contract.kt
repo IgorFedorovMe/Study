@@ -7,16 +7,17 @@ data class ViewState(
     val movies: List<Movie>,
     val errorMessage: String?,
 ) {
-    val isInErrorState = !errorMessage.isNullOrEmpty()
-    val isLoading = movies.isEmpty() || isInErrorState
+    val isLoading = movies.isEmpty() && errorMessage == null
 }
 
 sealed class UIEvent() : Event {
-    object OnGetMovies : UIEvent()
+    object GetMovies : UIEvent()
     data class OnMovieClick(val movie: Movie) : UIEvent()
 }
 
 sealed class DataEvent() : Event {
+    object ResetViewState : DataEvent()
     data class SuccessMoviesRequest(val movies: List<Movie>) : DataEvent()
     data class ErrorMoviesRequest(val errorMessage: String) : DataEvent()
 }
+

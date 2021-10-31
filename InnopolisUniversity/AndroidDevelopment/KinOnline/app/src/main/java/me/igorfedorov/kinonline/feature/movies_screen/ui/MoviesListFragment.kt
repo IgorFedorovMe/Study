@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.snackbar.Snackbar
 import me.igorfedorov.kinonline.MainActivity
 import me.igorfedorov.kinonline.R
 import me.igorfedorov.kinonline.base.utils.setAdapterAndCleanupOnDetachFromWindow
@@ -67,6 +68,8 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         setDataToAdapter(viewState)
 
         updateProgressBar(viewState)
+
+        renderError(viewState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -77,6 +80,21 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private fun updateProgressBar(viewState: ViewState) {
         binding.progressBar.isVisible = viewState.isLoading
+    }
+
+    private fun renderError(viewState: ViewState) {
+        viewState.errorMessage?.let {
+            Snackbar.make(
+                requireContext(),
+                binding.moviesListFragment,
+                it,
+                Snackbar.LENGTH_INDEFINITE
+            )
+                .setAction(R.string.retry) {
+                    viewModel.processUiEvent(UIEvent.GetMovies)
+                }
+                .show()
+        }
     }
 
     private fun setDataToAdapter(viewState: ViewState) {
