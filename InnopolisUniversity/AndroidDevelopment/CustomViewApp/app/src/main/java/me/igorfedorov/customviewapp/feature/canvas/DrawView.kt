@@ -51,6 +51,33 @@ class DrawView @JvmOverloads constructor(
         strokeWidth = STROKE_WIDTH // default: Hairline-width (really thin)
     }
 
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvas.drawBitmap(extraBitmap, 0f, 0f, null)
+        canvas.drawPath(drawing, paint)
+        canvas.drawPath(curPath, paint)
+    }
+
+    override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight)
+        // Changed extraBitmap.recycle() to return for not to redraw onSizeChanged
+        if (::extraBitmap.isInitialized) return
+        extraBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        extraCanvas = Canvas(extraBitmap)
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        motionTouchEventX = event.x
+        motionTouchEventY = event.y
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> touchStart()
+            MotionEvent.ACTION_MOVE -> touchMove()
+            MotionEvent.ACTION_UP -> touchUp()
+        }
+        return true
+    }
+
     fun render(state: CanvasViewState) {
         drawColor = ResourcesCompat.getColor(resources, state.color.value, null)
         paint.color = drawColor
@@ -80,18 +107,6 @@ class DrawView @JvmOverloads constructor(
 
     fun setOnClickField(onClickField: () -> Unit) {
         onClick = onClickField
-    }
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        motionTouchEventX = event.x
-        motionTouchEventY = event.y
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> touchStart()
-            MotionEvent.ACTION_MOVE -> touchMove()
-            MotionEvent.ACTION_UP -> touchUp()
-        }
-        return true
     }
 
     private fun restartCurrentXY() {
@@ -126,20 +141,5 @@ class DrawView @JvmOverloads constructor(
     private fun touchUp() {
         drawing.addPath(curPath)
         curPath.reset()
-    }
-
-    override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
-        super.onSizeChanged(width, height, oldWidth, oldHeight)
-        // Changed extraBitmap.recycle() to return for not to redraw onSizeChanged
-        if (::extraBitmap.isInitialized) return
-        extraBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        extraCanvas = Canvas(extraBitmap)
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        canvas.drawBitmap(extraBitmap, 0f, 0f, null)
-        canvas.drawPath(drawing, paint)
-        canvas.drawPath(curPath, paint)
     }
 }
