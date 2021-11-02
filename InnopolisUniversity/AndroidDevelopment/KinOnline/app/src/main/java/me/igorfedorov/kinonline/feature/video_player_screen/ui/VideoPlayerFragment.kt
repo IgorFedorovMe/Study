@@ -8,12 +8,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.util.Util
 import me.igorfedorov.kinonline.R
 import me.igorfedorov.kinonline.databinding.FragmentVideoPlayerBinding
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VideoPlayerFragment : Fragment(R.layout.fragment_video_player) {
@@ -35,12 +32,6 @@ class VideoPlayerFragment : Fragment(R.layout.fragment_video_player) {
 
     private val viewModel: VideoPlayerViewModel by viewModel()
 
-    private val exoPlayer by inject<ExoPlayer>()
-
-    private var playWhenReady = true
-    private var currentWindow = 0
-    private var playbackPosition = 0L
-
     override fun onStart() {
         super.onStart()
         hideSystemUi()
@@ -61,24 +52,17 @@ class VideoPlayerFragment : Fragment(R.layout.fragment_video_player) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.videoPlayerView.apply {
-            player = exoPlayer
-            exoPlayer.setMediaItem(MediaItem.fromUri(url))
+            player = viewModel.exoPlayer
+            viewModel.processUiEvent(UIEvent.OnGetUrlFromBundle(url))
         }
     }
 
     private fun initializePlayer() {
-        exoPlayer.playWhenReady = playWhenReady
-        exoPlayer.seekTo(currentWindow, playbackPosition)
-        exoPlayer.prepare()
+        viewModel.initializePlayer()
     }
 
     private fun releasePlayer() {
-        exoPlayer.run {
-            playbackPosition = this.currentPosition
-            currentWindow = this.currentWindowIndex
-            playWhenReady = this.playWhenReady
-            release()
-        }
+        viewModel.releasePlayer()
     }
 
     override fun onPause() {

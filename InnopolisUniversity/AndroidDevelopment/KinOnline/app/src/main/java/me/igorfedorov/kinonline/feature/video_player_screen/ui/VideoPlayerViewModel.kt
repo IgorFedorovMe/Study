@@ -34,10 +34,17 @@ class VideoPlayerViewModel(
     }
 
     fun initializePlayer() {
-        exoPlayer.apply {
-            playWhenReady = playWhenReady
-            seekTo(currentWindow, playbackPosition)
-            prepare()
+        exoPlayer.playWhenReady = playWhenReady
+        exoPlayer.seekTo(currentWindow, playbackPosition)
+        exoPlayer.prepare()
+    }
+
+    fun releasePlayer() {
+        exoPlayer.run {
+            playbackPosition = this.currentPosition
+            currentWindow = this.currentWindowIndex
+            playWhenReady = this.playWhenReady
+            release()
         }
     }
 }
