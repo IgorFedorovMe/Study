@@ -1,4 +1,4 @@
-package me.igorfedorov.newsfeedapp.common
+package me.igorfedorov.newsfeedapp.base.utils
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver

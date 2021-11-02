@@ -1,4 +1,4 @@
-package me.igorfedorov.newsfeedapp.base.base_vies_model
+package me.igorfedorov.newsfeedapp.base.base_view_model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

@@ -6,22 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import me.igorfedorov.newsfeedapp.R
-import me.igorfedorov.newsfeedapp.common.setAdapterAndCleanupOnDetachFromWindow
+import me.igorfedorov.newsfeedapp.base.utils.setAdapterAndCleanupOnDetachFromWindow
 import me.igorfedorov.newsfeedapp.databinding.FragmentNewsFeedScreenBinding
 import me.igorfedorov.newsfeedapp.feature.news_feed_screen.di.MAIN_SCREEN_VIEW_MODEL
-import me.igorfedorov.newsfeedapp.feature.news_feed_screen.domain.model.Article
 import me.igorfedorov.newsfeedapp.feature.news_feed_screen.ui.adapter.ArticlesAdapter
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.qualifier.named
 
 class NewsFeedScreenFragment : Fragment(R.layout.fragment_news_feed_screen) {
 
-    private val viewModel: NewsFeedScreenViewModel by viewModel(
+    private val viewModel: NewsFeedScreenViewModel by sharedViewModel(
         qualifier = named(
             MAIN_SCREEN_VIEW_MODEL
         )
@@ -30,7 +30,7 @@ class NewsFeedScreenFragment : Fragment(R.layout.fragment_news_feed_screen) {
     private val binding: FragmentNewsFeedScreenBinding by viewBinding(createMethod = CreateMethod.INFLATE)
 
     private val articlesAdapter: ArticlesAdapter by lazy {
-        ArticlesAdapter(::openArticle)
+        ArticlesAdapter(viewModel::openArticleWebView)
     }
 
     override fun onCreateView(
@@ -58,6 +58,8 @@ class NewsFeedScreenFragment : Fragment(R.layout.fragment_news_feed_screen) {
 
         updateErrorText(viewState)
 
+        openArticle(viewState)
+
     }
 
     private fun updateErrorText(viewState: ViewState) {
@@ -75,15 +77,21 @@ class NewsFeedScreenFragment : Fragment(R.layout.fragment_news_feed_screen) {
         articlesAdapter.items = viewState.articleList
     }
 
+    private fun openArticle(viewState: ViewState) {
+        viewState.article?.let { article ->
+            findNavController()
+                .navigate(
+                    NewsFeedScreenFragmentDirections
+                        .actionNewsFeedScreenFragmentToWebViewFragment(articleURL = article.url)
+                )
+        }
+    }
+
     private fun initAdapter() {
         binding.articlesRecyclerView.apply {
             setAdapterAndCleanupOnDetachFromWindow(articlesAdapter)
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
         }
-    }
-
-    private fun openArticle(article: Article) {
-
     }
 }

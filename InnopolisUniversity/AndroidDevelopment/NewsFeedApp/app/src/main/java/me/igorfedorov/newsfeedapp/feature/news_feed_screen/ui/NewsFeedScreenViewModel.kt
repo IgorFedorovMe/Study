@@ -1,8 +1,9 @@
 package me.igorfedorov.newsfeedapp.feature.news_feed_screen.ui
 
-import me.igorfedorov.newsfeedapp.base.base_vies_model.BaseViewModel
-import me.igorfedorov.newsfeedapp.base.base_vies_model.Event
+import me.igorfedorov.newsfeedapp.base.base_view_model.BaseViewModel
+import me.igorfedorov.newsfeedapp.base.base_view_model.Event
 import me.igorfedorov.newsfeedapp.feature.news_feed_screen.domain.NewsFeedInteractor
+import me.igorfedorov.newsfeedapp.feature.news_feed_screen.domain.model.Article
 
 
 class NewsFeedScreenViewModel(
@@ -16,6 +17,7 @@ class NewsFeedScreenViewModel(
     override fun initialViewState(): ViewState {
         return ViewState(
             articleList = emptyList(),
+            article = null,
             isLoading = false,
             errorMessage = "",
             isInErrorState = false
@@ -35,8 +37,16 @@ class NewsFeedScreenViewModel(
                     }
                 )
             }
+            is UIEvent.OnArticleCLick -> {
+                return previousState.copy(article = event.article)
+            }
+            is UIEvent.OnGoBackFromWebView -> {
+                return previousState.copy(article = null)
+            }
             is DataEvent.OnLoadData -> {
-                return previousState.copy(isLoading = true)
+                return previousState.copy(
+                    isLoading = true
+                )
             }
             is DataEvent.SuccessNewsRequest -> {
                 return previousState.copy(
@@ -49,10 +59,18 @@ class NewsFeedScreenViewModel(
                 return previousState.copy(
                     isLoading = false,
                     errorMessage = event.errorMessage,
-                    isInErrorState = true,
+                    isInErrorState = true
                 )
             }
         }
         return null
+    }
+
+    fun openArticleWebView(article: Article) {
+        processUiEvent(UIEvent.OnArticleCLick(article))
+    }
+
+    fun closeArticleWebView() {
+        processUiEvent(UIEvent.OnGoBackFromWebView)
     }
 }

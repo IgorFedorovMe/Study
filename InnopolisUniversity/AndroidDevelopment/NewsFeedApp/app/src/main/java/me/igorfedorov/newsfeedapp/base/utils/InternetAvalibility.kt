@@ -2,7 +2,6 @@ package me.igorfedorov.newsfeedapp.base.utils
 
 import android.content.Context
 import android.net.NetworkCapabilities
-import me.igorfedorov.newsfeedapp.common.connectivityManager
 
 class InternetAvailability(private val context: Context) {
 

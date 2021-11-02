@@ -5,8 +5,8 @@ import com.bumptech.glide.Glide
 import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import me.igorfedorov.newsfeedapp.R
-import me.igorfedorov.newsfeedapp.common.dateFromISO8601
-import me.igorfedorov.newsfeedapp.common.setThrottledClickListener
+import me.igorfedorov.newsfeedapp.base.utils.dateFromISO8601
+import me.igorfedorov.newsfeedapp.base.utils.setThrottledClickListener
 import me.igorfedorov.newsfeedapp.databinding.ItemArticleBinding
 import me.igorfedorov.newsfeedapp.feature.news_feed_screen.domain.model.Article
 
