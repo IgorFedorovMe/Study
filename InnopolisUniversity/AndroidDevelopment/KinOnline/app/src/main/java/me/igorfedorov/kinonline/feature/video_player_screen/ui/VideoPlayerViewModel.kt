@@ -8,8 +8,12 @@ import me.igorfedorov.kinonline.base.base_view_model.Event
 
 class VideoPlayerViewModel(
     private val router: Router,
-    private val exoPlayer: ExoPlayer
+    val exoPlayer: ExoPlayer
 ) : BaseViewModel<ViewState>() {
+
+    private var playWhenReady = true
+    private var currentWindow = 0
+    private var playbackPosition = 0L
 
     override fun initialViewState() = ViewState(
         movieUrl = ""
@@ -27,5 +31,13 @@ class VideoPlayerViewModel(
             }
         }
         return null
+    }
+
+    fun initializePlayer() {
+        exoPlayer.apply {
+            playWhenReady = playWhenReady
+            seekTo(currentWindow, playbackPosition)
+            prepare()
+        }
     }
 }
