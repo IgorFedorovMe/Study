@@ -1,4 +1,4 @@
-package me.igorfedorov.newsfeedapp.common
+package me.igorfedorov.newsfeedapp.base.common
 
 object Constants {
 

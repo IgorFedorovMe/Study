@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/news_feed_menu_item"
-        android:enabled="true"
+        android:id="@+id/news"
         android:icon="@drawable/news_feed_variant_outline"
         android:title="@string/news_feed" />
     <item
-        android:id="@+id/news_bookmarks_menu_item"
-        android:enabled="true"
+        android:id="@+id/bookmarks"
         android:icon="@drawable/news_bookmark_multiple_outline"
         android:title="@string/bookmarks" />
     <item
-        android:id="@+id/news_search_menu_item"
-        android:enabled="true"
+        android:id="@+id/search"
         android:icon="@drawable/news_search_outline"
         android:title="@string/search_news" />
 </menu>

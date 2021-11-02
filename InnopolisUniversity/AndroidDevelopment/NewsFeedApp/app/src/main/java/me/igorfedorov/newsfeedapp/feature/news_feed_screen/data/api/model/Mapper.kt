@@ -20,7 +20,8 @@ fun ArticleDTO.toArticle(): Article =
         source = sourceDTO.toSource(),
         title = title,
         url = url,
-        urlToImage = urlToImage
+        urlToImage = urlToImage,
+        isBookmarked = false
     )
 
 fun SourceDTO.toSource(): Source =

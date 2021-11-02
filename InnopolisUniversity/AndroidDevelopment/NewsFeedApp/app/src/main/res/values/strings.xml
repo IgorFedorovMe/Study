@@ -4,4 +4,11 @@
     <string name="bookmarks">Bookmarks</string>
     <string name="search_news">Search News</string>
     <string name="article_s_image">Article\'s image</string>
+    <string name="enter_news_topic_to_search_for">Enter News topic to search for</string>
+
+    <string-array name="sort_order_array">
+        <item>RELEVANCY</item>
+        <item>POPULARITY</item>
+        <item>PUBLISHED AT</item>
+    </string-array>
 </resources>

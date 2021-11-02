@@ -1,23 +1,34 @@
 package me.igorfedorov.newsfeedapp.feature.news_feed_screen.ui.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.bumptech.glide.Glide
-import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
+import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import me.igorfedorov.newsfeedapp.R
 import me.igorfedorov.newsfeedapp.base.utils.dateFromISO8601
+import me.igorfedorov.newsfeedapp.base.utils.loadImage
 import me.igorfedorov.newsfeedapp.base.utils.setThrottledClickListener
 import me.igorfedorov.newsfeedapp.databinding.ItemArticleBinding
 import me.igorfedorov.newsfeedapp.feature.news_feed_screen.domain.model.Article
 
-class ArticlesAdapter(onItemClickListener: (article: Article) -> Unit) :
-    AsyncListDifferDelegationAdapter<Article>(ArticleDiffUtilCallback()) {
+class ArticlesAdapter(
+    onItemClickListener: (article: Article) -> Unit,
+    onBookmarkClick: (article: Article) -> Unit
+) :
+    ListDelegationAdapter<List<Article>>() {
 
     init {
-        delegatesManager.addDelegate(articleAdapterDelegate(onItemClickListener))
+        delegatesManager.addDelegate(
+            articleAdapterDelegate(
+                onItemClickListener,
+                onBookmarkClick
+            )
+        )
     }
 
-    private fun articleAdapterDelegate(onItemClickListener: (article: Article) -> Unit) =
+    private fun articleAdapterDelegate(
+        onItemClickListener: (article: Article) -> Unit,
+        onBookmarkClick: (article: Article) -> Unit
+    ) =
         adapterDelegateViewBinding<Article, Article, ItemArticleBinding>(
             { layoutInflater, parent -> ItemArticleBinding.inflate(layoutInflater, parent, false) }
         ) {
@@ -26,15 +37,20 @@ class ArticlesAdapter(onItemClickListener: (article: Article) -> Unit) :
                 onItemClickListener(item)
             }
 
+            binding.addToBookmarksIcon.setThrottledClickListener {
+                onBookmarkClick(item)
+            }
+
             bind {
                 binding.apply {
                     authorTextView.text = item.author
                     descriptionTextView.text = item.description
                     publishedAtTextView.text = item.publishedAt?.dateFromISO8601()
-                    Glide.with(binding.root).load(item.urlToImage)
-                        .centerCrop()
-                        .placeholder(R.drawable.news_feed_variant_outline)
-                        .into(binding.articleImageImageView)
+                    binding.articleImageImageView.loadImage(item.urlToImage) {
+                        centerCrop()
+                    }
+                    addToBookmarksIcon.setImageResource(R.drawable.add_to_bookmarks)
+                    if (item.isBookmarked) addToBookmarksIcon.setImageResource(R.drawable.remove_from_bookmarks)
                 }
             }
         }

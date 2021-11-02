@@ -4,12 +4,22 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../../layout/custom_preview.xml" value="0.5796875" />
+        <entry key="../../../../Library/Android/sdk/platforms/android-31/data/res/layout/simple_spinner_dropdown_item.xml" value="0.5796875" />
+        <entry key="../../../../Library/Android/sdk/platforms/android-31/data/res/layout/simple_spinner_item.xml" value="0.5796875" />
+        <entry key="app/src/main/res/drawable/bookmark.xml" value="0.5953125" />
+        <entry key="app/src/main/res/drawable/bookmark_outline.xml" value="0.5953125" />
+        <entry key="app/src/main/res/drawable/news_add_to_bookmark_outline.xml" value="0.5953125" />
+        <entry key="app/src/main/res/drawable/news_bookmark_multiple_outline.xml" value="0.5953125" />
+        <entry key="app/src/main/res/drawable/news_feed_variant_outline.xml" value="0.5807291666666666" />
+        <entry key="app/src/main/res/drawable/remove_from_bookmarks.xml" value="0.5953125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.4569746376811594" />
-        <entry key="app/src/main/res/layout/fragment_bottom_navigation.xml" value="0.5791666666666667" />
+        <entry key="app/src/main/res/layout/fragment_bookmarks_screen.xml" value="0.5791666666666667" />
+        <entry key="app/src/main/res/layout/fragment_bottom_navigation.xml" value="0.5584" />
         <entry key="app/src/main/res/layout/fragment_main_screen.xml" value="0.4904891304347826" />
         <entry key="app/src/main/res/layout/fragment_news_feed_screen.xml" value="0.5791666666666667" />
+        <entry key="app/src/main/res/layout/fragment_search_news_screen.xml" value="0.5796875" />
         <entry key="app/src/main/res/layout/fragment_web_view.xml" value="0.5645833333333333" />
-        <entry key="app/src/main/res/layout/item_article.xml" value="0.75" />
+        <entry key="app/src/main/res/layout/item_article.xml" value="0.7331460674157303" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.5791666666666667" />
       </map>
     </option>
