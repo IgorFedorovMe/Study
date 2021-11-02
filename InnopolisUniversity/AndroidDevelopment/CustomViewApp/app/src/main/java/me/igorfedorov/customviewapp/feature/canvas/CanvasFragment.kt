@@ -11,8 +11,8 @@ import me.igorfedorov.customviewapp.ToolsLayout
 import me.igorfedorov.customviewapp.base.utils.setThrottledClickListener
 import me.igorfedorov.customviewapp.databinding.FragmentCanvasBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import me.igorfedorov.customviewapp.base.canvas_state.LINE as ENUM_LINE
-import me.igorfedorov.customviewapp.base.canvas_state.SIZE as ENUM_SIZE
+import me.igorfedorov.customviewapp.base.canvas_state.Line as ENUM_LINE
+import me.igorfedorov.customviewapp.base.canvas_state.Size as ENUM_SIZE
 
 class CanvasFragment : Fragment(R.layout.fragment_canvas) {
 

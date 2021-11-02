@@ -3,24 +3,24 @@ package me.igorfedorov.customviewapp.feature.canvas
 import me.igorfedorov.customviewapp.ToolsItem
 import me.igorfedorov.customviewapp.base.base_view_model.BaseViewModel
 import me.igorfedorov.customviewapp.base.base_view_model.Event
-import me.igorfedorov.customviewapp.base.canvas_state.COLOR
-import me.igorfedorov.customviewapp.base.canvas_state.LINE
-import me.igorfedorov.customviewapp.base.canvas_state.SIZE
+import me.igorfedorov.customviewapp.base.canvas_state.Color
+import me.igorfedorov.customviewapp.base.canvas_state.Line
+import me.igorfedorov.customviewapp.base.canvas_state.Size
 
 class CanvasFragmentViewModel : BaseViewModel<ViewState>() {
 
     override fun initialViewState() = ViewState(
-        colors = enumValues<COLOR>().map { ToolsItem.ColorModel(it.value) },
-        sizes = enumValues<SIZE>().map { ToolsItem.SizeModel(it) },
-        lines = enumValues<LINE>().map { ToolsItem.LineModel(it) },
+        colors = enumValues<Color>().map { ToolsItem.ColorModel(it.value) },
+        sizes = enumValues<Size>().map { ToolsItem.SizeModel(it) },
+        lines = enumValues<Line>().map { ToolsItem.LineModel(it) },
         isToolsVisible = false,
         isPaletteToolsVisible = false,
         isSizeToolsVisible = false,
         isLineToolsVisible = false,
         canvasViewState = CanvasViewState(
-            color = COLOR.BLACK,
-            size = SIZE.SMALL,
-            line = LINE.CONTINUOUS
+            color = Color.BLACK,
+            size = Size.SMALL,
+            line = Line.CONTINUOUS
         )
     )
 
@@ -36,7 +36,7 @@ class CanvasFragmentViewModel : BaseViewModel<ViewState>() {
                 return previousState.copy(
                     isPaletteToolsVisible = !previousState.isPaletteToolsVisible,
                     canvasViewState = previousState.canvasViewState.copy(
-                        color = COLOR.from(
+                        color = Color.from(
                             previousState.colors[event.index].color
                         )
                     )

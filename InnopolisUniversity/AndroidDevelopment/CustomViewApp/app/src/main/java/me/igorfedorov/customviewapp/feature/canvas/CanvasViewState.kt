@@ -1,11 +1,11 @@
 package me.igorfedorov.customviewapp.feature.canvas
 
-import me.igorfedorov.customviewapp.base.canvas_state.COLOR
-import me.igorfedorov.customviewapp.base.canvas_state.LINE
-import me.igorfedorov.customviewapp.base.canvas_state.SIZE
+import me.igorfedorov.customviewapp.base.canvas_state.Color
+import me.igorfedorov.customviewapp.base.canvas_state.Line
+import me.igorfedorov.customviewapp.base.canvas_state.Size
 
 data class CanvasViewState(
-    val color: COLOR,
-    val size: SIZE,
-    val line: LINE
+    val color: Color,
+    val size: Size,
+    val line: Line
 )

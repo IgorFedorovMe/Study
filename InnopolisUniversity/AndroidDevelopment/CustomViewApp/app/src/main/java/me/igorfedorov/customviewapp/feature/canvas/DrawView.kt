@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import me.igorfedorov.customviewapp.R
-import me.igorfedorov.customviewapp.base.canvas_state.LINE
+import me.igorfedorov.customviewapp.base.canvas_state.Line
 import kotlin.math.abs
 
 class DrawView @JvmOverloads constructor(
@@ -57,7 +57,7 @@ class DrawView @JvmOverloads constructor(
         paint.strokeWidth = state.size.value.toFloat()
         // When expression to simplify adding new Line states
         when (state.line) {
-            LINE.BROKEN -> {
+            Line.BROKEN -> {
                 paint.pathEffect = DashPathEffect(
                     floatArrayOf(
                         state.size.value.toFloat() * 2,
@@ -67,7 +67,7 @@ class DrawView @JvmOverloads constructor(
                     ), 0f
                 )
             }
-            LINE.CONTINUOUS -> {
+            Line.CONTINUOUS -> {
                 paint.pathEffect = null
             }
         }
