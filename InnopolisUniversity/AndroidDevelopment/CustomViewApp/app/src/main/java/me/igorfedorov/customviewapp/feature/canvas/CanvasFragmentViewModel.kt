@@ -6,11 +6,14 @@ import me.igorfedorov.customviewapp.base.base_view_model.Event
 import me.igorfedorov.customviewapp.base.canvas_state.EnumColor
 import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
 import me.igorfedorov.customviewapp.base.canvas_state.EnumSize
+import me.igorfedorov.customviewapp.base.utils.SingleLiveEvent
 import me.igorfedorov.customviewapp.feature.canvas.domain.CanvasInteractor
 
 class CanvasFragmentViewModel(
     private val canvasInteractor: CanvasInteractor
 ) : BaseViewModel<ViewState>() {
+
+    val toastEvent = SingleLiveEvent<String>()
 
     override fun initialViewState() = ViewState(
         colors = enumValues<EnumColor>().map { ToolsItem.ColorModel(it.value) },
@@ -72,6 +75,10 @@ class CanvasFragmentViewModel(
             }
             is UIEvent.OnSaveDrawingClicked -> {
                 canvasInteractor.saveBitmapToMediaStore(event.bitmap)
+            }
+            is UIEvent.OnReadWritePermissionDenied -> {
+                // Just as a hardcoded impl
+                toastEvent.postValue("Write / Read Permission needed")
             }
         }
         return null

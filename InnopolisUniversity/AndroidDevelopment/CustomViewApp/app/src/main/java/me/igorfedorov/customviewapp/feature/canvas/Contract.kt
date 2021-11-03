@@ -23,6 +23,7 @@ sealed class UIEvent : Event {
     object OnSizeToolsClicked : UIEvent()
     object OnLineToolsClicked : UIEvent()
     object OnShowTools : UIEvent()
+    object OnReadWritePermissionDenied : UIEvent()
     data class OnSaveDrawingClicked(val bitmap: Bitmap) : UIEvent()
     data class OnColorClicked(val index: Int) : UIEvent()
     data class OnSizeClicked(val enumSize: EnumSize) : UIEvent()

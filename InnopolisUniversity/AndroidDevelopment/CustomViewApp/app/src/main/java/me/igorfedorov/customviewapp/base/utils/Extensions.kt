@@ -2,6 +2,9 @@ package me.igorfedorov.customviewapp.base.utils
 
 import android.os.Build
 import android.view.View
+import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.AbsDelegationAdapter
 
@@ -45,3 +48,19 @@ fun View.throttle(delay: Long = DEFAULT_THROTTLE_DELAY, action: () -> Unit): Boo
 }
 
 fun minSdk29() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+
+fun <T : Fragment> T.toastShort(@StringRes message: Int) {
+    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+}
+
+fun <T : Fragment> T.toastLong(@StringRes message: Int) {
+    Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+}
+
+fun <T : Fragment> T.toastShort(message: String) {
+    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+}
+
+fun <T : Fragment> T.toastLong(message: String) {
+    Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+}

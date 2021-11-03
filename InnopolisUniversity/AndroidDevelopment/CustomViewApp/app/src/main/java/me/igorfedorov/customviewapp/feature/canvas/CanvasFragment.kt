@@ -17,6 +17,7 @@ import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
 import me.igorfedorov.customviewapp.base.canvas_state.EnumSize
 import me.igorfedorov.customviewapp.base.utils.minSdk29
 import me.igorfedorov.customviewapp.base.utils.setThrottledClickListener
+import me.igorfedorov.customviewapp.base.utils.toastLong
 import me.igorfedorov.customviewapp.databinding.FragmentCanvasBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,7 +30,6 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
                 .takeIf { minSdk29().not() }
         )
-
 
         private const val PALETTE = 0
         private const val SIZE = 1
@@ -57,7 +57,7 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
             if (isGranted) {
                 saveBitmap()
             } else {
-                //TODO
+                viewModel.processUiEvent(UIEvent.OnReadWritePermissionDenied)
             }
         }
 
@@ -78,6 +78,10 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
             viewModel.processUiEvent(UIEvent.OnLineClicked(EnumLine.values()[it]))
         }
         viewModel.viewState.observe(viewLifecycleOwner, ::render)
+
+        viewModel.toastEvent.observe(viewLifecycleOwner) {
+            toastLong(it)
+        }
     }
 
     private fun setOnToolsClickListeners() {
@@ -106,14 +110,13 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
                     true
                 }
                 R.id.save_drawing -> {
-                    if (minSdk29()) {
+                    if (minSdk29())
                         saveBitmap()
-                    } else {
+                    else {
                         if (hasPermission())
                             saveBitmap()
-                        else {
+                        else
                             PERMISSIONS.forEach { requestPermissionLauncher.launch(it) }
-                        }
                     }
                     true
                 }
@@ -183,5 +186,4 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
                 it
             ) == PackageManager.PERMISSION_GRANTED
         }
-
 }

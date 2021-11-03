@@ -41,6 +41,7 @@ dependencies {
     def adapter_delegate_version = "4.3.0"
     def koin_version = "3.1.2"
     def view_binding_delegate_version = "1.5.1-beta01"
+    def timber_version = "5.0.1"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
@@ -65,5 +66,8 @@ dependencies {
 
     // Kirich's viewBinding delegate
     implementation "com.github.kirich1409:viewbindingpropertydelegate:$view_binding_delegate_version"
+
+    //Logs
+    implementation "com.jakewharton.timber:timber:$timber_version"
 
 }
