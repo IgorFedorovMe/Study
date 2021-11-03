@@ -27,14 +27,10 @@ class BitmapRepositoryImpl(
     }
 
     private fun saveImage(bitmap: Bitmap, uri: Uri) {
-        try {
-            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                outputStream.use {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-                }
+        context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+            outputStream.use {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
             }
-        } catch (t: Throwable) {
-            t.printStackTrace()
         }
     }
 

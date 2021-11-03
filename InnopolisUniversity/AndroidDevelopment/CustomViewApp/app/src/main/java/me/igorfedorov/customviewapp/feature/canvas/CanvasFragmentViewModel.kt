@@ -82,7 +82,14 @@ class CanvasFragmentViewModel(
 
     fun saveBitmap(bitmap: Bitmap) {
         viewModelScope.launch {
-            canvasInteractor.saveBitmapToMediaStore(bitmap)
+            canvasInteractor.saveBitmapToMediaStore(bitmap).fold(
+                onError = {
+
+                },
+                onSuccess = {
+
+                }
+            )
         }
     }
 }
