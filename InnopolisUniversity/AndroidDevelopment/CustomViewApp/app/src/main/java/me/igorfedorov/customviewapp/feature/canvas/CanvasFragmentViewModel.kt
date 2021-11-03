@@ -1,8 +1,5 @@
 package me.igorfedorov.customviewapp.feature.canvas
 
-import android.graphics.Bitmap
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import me.igorfedorov.customviewapp.ToolsItem
 import me.igorfedorov.customviewapp.base.base_view_model.BaseViewModel
 import me.igorfedorov.customviewapp.base.base_view_model.Event
@@ -74,22 +71,9 @@ class CanvasFragmentViewModel(
                 return previousState.copy(isLineToolsVisible = !previousState.isLineToolsVisible)
             }
             is UIEvent.OnSaveDrawingClicked -> {
-
+                canvasInteractor.saveBitmapToMediaStore(event.bitmap)
             }
         }
         return null
-    }
-
-    fun saveBitmap(bitmap: Bitmap) {
-        viewModelScope.launch {
-            canvasInteractor.saveBitmapToMediaStore(bitmap).fold(
-                onError = {
-
-                },
-                onSuccess = {
-
-                }
-            )
-        }
     }
 }

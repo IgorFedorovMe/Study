@@ -1,26 +1,35 @@
 package me.igorfedorov.customviewapp.feature.canvas
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.core.view.drawToBitmap
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
-import kotlinx.coroutines.launch
 import me.igorfedorov.customviewapp.R
 import me.igorfedorov.customviewapp.ToolsLayout
 import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
 import me.igorfedorov.customviewapp.base.canvas_state.EnumSize
+import me.igorfedorov.customviewapp.base.utils.minSdk29
 import me.igorfedorov.customviewapp.base.utils.setThrottledClickListener
 import me.igorfedorov.customviewapp.databinding.FragmentCanvasBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import permissions.dispatcher.ktx.constructLocationPermissionRequest
 
 class CanvasFragment : Fragment(R.layout.fragment_canvas) {
 
     companion object {
+
+        private val PERMISSIONS = listOfNotNull(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                .takeIf { minSdk29().not() }
+        )
+
 
         private const val PALETTE = 0
         private const val SIZE = 1
@@ -40,6 +49,17 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
             requireActivity().findViewById(R.id.line)
         )
     }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                saveBitmap()
+            } else {
+                //TODO
+            }
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,23 +106,29 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
                     true
                 }
                 R.id.save_drawing -> {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        constructLocationPermissionRequest(
-                            permissions = arrayOf(
-                            ),
-                            requiresPermission = {
-                                viewModel.saveBitmap(
-                                    requireActivity().findViewById<DrawView>(R.id.drawView)
-                                        .drawToBitmap()
-                                )
-                            }
-                        ).launch()
+                    if (minSdk29()) {
+                        saveBitmap()
+                    } else {
+                        if (hasPermission())
+                            saveBitmap()
+                        else {
+                            PERMISSIONS.forEach { requestPermissionLauncher.launch(it) }
+                        }
                     }
                     true
                 }
                 else -> false
             }
         }
+    }
+
+    private fun saveBitmap() {
+        viewModel.processUiEvent(
+            UIEvent.OnSaveDrawingClicked(
+                requireActivity().findViewById<DrawView>(R.id.drawView)
+                    .drawToBitmap()
+            )
+        )
     }
 
     private fun render(viewState: ViewState) {
@@ -149,4 +175,13 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
             )
         }
     }
+
+    private fun hasPermission() =
+        PERMISSIONS.all {
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                it
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+
 }
