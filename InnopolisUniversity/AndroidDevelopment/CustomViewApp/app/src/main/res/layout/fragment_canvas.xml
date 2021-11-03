@@ -27,9 +27,9 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/palettePickerImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/palette_picker_image_view" />
+        app:layout_constraintStart_toEndOf="@+id/palettePickerImageView" />
 
     <include
         android:id="@+id/size"
@@ -37,7 +37,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/palette"
+        app:layout_constraintBottom_toBottomOf="@+id/sizePickerImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/sizePickerImageView" />
 
@@ -47,12 +47,12 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/size"
+        app:layout_constraintBottom_toBottomOf="@id/linePickerImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/linePickerImageView" />
 
     <ImageView
-        android:id="@+id/palette_picker_image_view"
+        android:id="@+id/palettePickerImageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,7 +62,7 @@
         android:id="@+id/sizePickerImageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/palette_picker_image_view"
+        app:layout_constraintBottom_toTopOf="@+id/palettePickerImageView"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_size_small" />
 
