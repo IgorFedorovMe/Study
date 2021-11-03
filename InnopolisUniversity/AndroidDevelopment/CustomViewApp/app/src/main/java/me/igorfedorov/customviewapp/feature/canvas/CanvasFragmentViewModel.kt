@@ -1,13 +1,19 @@
 package me.igorfedorov.customviewapp.feature.canvas
 
+import android.graphics.Bitmap
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import me.igorfedorov.customviewapp.ToolsItem
 import me.igorfedorov.customviewapp.base.base_view_model.BaseViewModel
 import me.igorfedorov.customviewapp.base.base_view_model.Event
 import me.igorfedorov.customviewapp.base.canvas_state.EnumColor
 import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
 import me.igorfedorov.customviewapp.base.canvas_state.EnumSize
+import me.igorfedorov.customviewapp.feature.canvas.domain.CanvasInteractor
 
-class CanvasFragmentViewModel : BaseViewModel<ViewState>() {
+class CanvasFragmentViewModel(
+    private val canvasInteractor: CanvasInteractor
+) : BaseViewModel<ViewState>() {
 
     override fun initialViewState() = ViewState(
         colors = enumValues<EnumColor>().map { ToolsItem.ColorModel(it.value) },
@@ -67,7 +73,16 @@ class CanvasFragmentViewModel : BaseViewModel<ViewState>() {
             is UIEvent.OnLineToolsClicked -> {
                 return previousState.copy(isLineToolsVisible = !previousState.isLineToolsVisible)
             }
+            is UIEvent.OnSaveDrawingClicked -> {
+
+            }
         }
         return null
+    }
+
+    fun saveBitmap(bitmap: Bitmap) {
+        viewModelScope.launch {
+            canvasInteractor.saveBitmapToMediaStore(bitmap)
+        }
     }
 }

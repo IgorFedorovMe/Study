@@ -3,9 +3,12 @@ package me.igorfedorov.customviewapp.feature.canvas
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.drawToBitmap
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
+import kotlinx.coroutines.launch
 import me.igorfedorov.customviewapp.R
 import me.igorfedorov.customviewapp.ToolsLayout
 import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
@@ -13,6 +16,7 @@ import me.igorfedorov.customviewapp.base.canvas_state.EnumSize
 import me.igorfedorov.customviewapp.base.utils.setThrottledClickListener
 import me.igorfedorov.customviewapp.databinding.FragmentCanvasBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import permissions.dispatcher.ktx.constructLocationPermissionRequest
 
 class CanvasFragment : Fragment(R.layout.fragment_canvas) {
 
@@ -79,6 +83,21 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
                 }
                 R.id.delete_drawing -> {
                     requireActivity().findViewById<DrawView>(R.id.drawView).clear()
+                    true
+                }
+                R.id.save_drawing -> {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        constructLocationPermissionRequest(
+                            permissions = arrayOf(
+                            ),
+                            requiresPermission = {
+                                viewModel.saveBitmap(
+                                    requireActivity().findViewById<DrawView>(R.id.drawView)
+                                        .drawToBitmap()
+                                )
+                            }
+                        ).launch()
+                    }
                     true
                 }
                 else -> false

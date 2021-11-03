@@ -22,6 +22,7 @@ sealed class UIEvent : Event {
     object OnSizeToolsClicked : UIEvent()
     object OnLineToolsClicked : UIEvent()
     object OnShowTools : UIEvent()
+    object OnSaveDrawingClicked : UIEvent()
     data class OnColorClicked(val index: Int) : UIEvent()
     data class OnSizeClicked(val enumSize: EnumSize) : UIEvent()
     data class OnLineClicked(val enumLine: EnumLine) : UIEvent()

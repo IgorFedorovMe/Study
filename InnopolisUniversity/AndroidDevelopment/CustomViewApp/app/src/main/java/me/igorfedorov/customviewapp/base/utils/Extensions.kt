@@ -1,5 +1,6 @@
 package me.igorfedorov.customviewapp.base.utils
 
+import android.os.Build
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.AbsDelegationAdapter
@@ -42,3 +43,5 @@ fun View.throttle(delay: Long = DEFAULT_THROTTLE_DELAY, action: () -> Unit): Boo
     }
     return false
 }
+
+fun minSdk29() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
