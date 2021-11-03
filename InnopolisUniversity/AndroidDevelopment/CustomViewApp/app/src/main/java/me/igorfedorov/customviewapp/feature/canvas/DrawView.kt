@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import me.igorfedorov.customviewapp.R
-import me.igorfedorov.customviewapp.base.canvas_state.Line
+import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
 import kotlin.math.abs
 
 class DrawView @JvmOverloads constructor(
@@ -79,22 +79,22 @@ class DrawView @JvmOverloads constructor(
     }
 
     fun render(state: CanvasViewState) {
-        drawColor = ResourcesCompat.getColor(resources, state.color.value, null)
+        drawColor = ResourcesCompat.getColor(resources, state.enumColor.value, null)
         paint.color = drawColor
-        paint.strokeWidth = state.size.value.toFloat()
+        paint.strokeWidth = state.enumSize.value.toFloat()
         // When expression to simplify adding new Line states
-        when (state.line) {
-            Line.BROKEN -> {
+        when (state.enumLine) {
+            EnumLine.BROKEN -> {
                 paint.pathEffect = DashPathEffect(
                     floatArrayOf(
-                        state.size.value.toFloat() * 2,
-                        state.size.value.toFloat() * 2,
-                        state.size.value.toFloat() * 2,
-                        state.size.value.toFloat() * 2
+                        state.enumSize.value.toFloat() * 2,
+                        state.enumSize.value.toFloat() * 2,
+                        state.enumSize.value.toFloat() * 2,
+                        state.enumSize.value.toFloat() * 2
                     ), 0f
                 )
             }
-            Line.CONTINUOUS -> {
+            EnumLine.CONTINUOUS -> {
                 paint.pathEffect = null
             }
         }

@@ -34,7 +34,7 @@ fun sizeAdapterDelegate(
     ) {
         bind {
 
-            binding.size.text = item.size.name
+            binding.size.text = item.enumSize.name
 
             itemView.setOnClickListener {
                 onClick(adapterPosition)
@@ -50,7 +50,7 @@ fun lineAdapterDelegate(
     ) {
         bind {
 
-            binding.line.text = item.line.name
+            binding.line.text = item.enumLine.name
 
             itemView.setOnClickListener {
                 onClick(adapterPosition)

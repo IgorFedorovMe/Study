@@ -3,24 +3,24 @@ package me.igorfedorov.customviewapp.feature.canvas
 import me.igorfedorov.customviewapp.ToolsItem
 import me.igorfedorov.customviewapp.base.base_view_model.BaseViewModel
 import me.igorfedorov.customviewapp.base.base_view_model.Event
-import me.igorfedorov.customviewapp.base.canvas_state.Color
-import me.igorfedorov.customviewapp.base.canvas_state.Line
-import me.igorfedorov.customviewapp.base.canvas_state.Size
+import me.igorfedorov.customviewapp.base.canvas_state.EnumColor
+import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
+import me.igorfedorov.customviewapp.base.canvas_state.EnumSize
 
 class CanvasFragmentViewModel : BaseViewModel<ViewState>() {
 
     override fun initialViewState() = ViewState(
-        colors = enumValues<Color>().map { ToolsItem.ColorModel(it.value) },
-        sizes = enumValues<Size>().map { ToolsItem.SizeModel(it) },
-        lines = enumValues<Line>().map { ToolsItem.LineModel(it) },
+        colors = enumValues<EnumColor>().map { ToolsItem.ColorModel(it.value) },
+        sizes = enumValues<EnumSize>().map { ToolsItem.SizeModel(it) },
+        lines = enumValues<EnumLine>().map { ToolsItem.LineModel(it) },
         isToolsVisible = false,
         isPaletteToolsVisible = false,
         isSizeToolsVisible = false,
         isLineToolsVisible = false,
         canvasViewState = CanvasViewState(
-            color = Color.BLACK,
-            size = Size.SMALL,
-            line = Line.CONTINUOUS
+            enumColor = EnumColor.BLACK,
+            enumSize = EnumSize.SMALL,
+            enumLine = EnumLine.CONTINUOUS
         )
     )
 
@@ -36,7 +36,7 @@ class CanvasFragmentViewModel : BaseViewModel<ViewState>() {
                 return previousState.copy(
                     isPaletteToolsVisible = !previousState.isPaletteToolsVisible,
                     canvasViewState = previousState.canvasViewState.copy(
-                        color = Color.from(
+                        enumColor = EnumColor.from(
                             previousState.colors[event.index].color
                         )
                     )
@@ -46,7 +46,7 @@ class CanvasFragmentViewModel : BaseViewModel<ViewState>() {
                 return previousState.copy(
                     isSizeToolsVisible = !previousState.isSizeToolsVisible,
                     canvasViewState = previousState.canvasViewState.copy(
-                        size = previousState.sizes[event.size.ordinal].size
+                        enumSize = previousState.sizes[event.enumSize.ordinal].enumSize
                     )
                 )
             }
@@ -54,7 +54,7 @@ class CanvasFragmentViewModel : BaseViewModel<ViewState>() {
                 return previousState.copy(
                     isLineToolsVisible = !previousState.isLineToolsVisible,
                     canvasViewState = previousState.canvasViewState.copy(
-                        line = previousState.lines[event.line.ordinal].line
+                        enumLine = previousState.lines[event.enumLine.ordinal].enumLine
                     )
                 )
             }

@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import me.igorfedorov.customviewapp.R
 import me.igorfedorov.customviewapp.ToolsLayout
+import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
+import me.igorfedorov.customviewapp.base.canvas_state.EnumSize
 import me.igorfedorov.customviewapp.base.utils.setThrottledClickListener
 import me.igorfedorov.customviewapp.databinding.FragmentCanvasBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import me.igorfedorov.customviewapp.base.canvas_state.Line as ENUM_LINE
-import me.igorfedorov.customviewapp.base.canvas_state.Size as ENUM_SIZE
 
 class CanvasFragment : Fragment(R.layout.fragment_canvas) {
 
@@ -48,10 +48,10 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
             viewModel.processUiEvent(UIEvent.OnColorClicked(it))
         }
         toolsLayouts[SIZE].setOnClickListener {
-            viewModel.processUiEvent(UIEvent.OnSizeClicked(ENUM_SIZE.values()[it]))
+            viewModel.processUiEvent(UIEvent.OnSizeClicked(EnumSize.values()[it]))
         }
         toolsLayouts[LINE].setOnClickListener {
-            viewModel.processUiEvent(UIEvent.OnLineClicked(ENUM_LINE.values()[it]))
+            viewModel.processUiEvent(UIEvent.OnLineClicked(EnumLine.values()[it]))
         }
         viewModel.viewState.observe(viewLifecycleOwner, ::render)
     }
@@ -104,14 +104,14 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
     private fun renderSizePickerImageView(viewState: ViewState) {
         binding.sizePickerImageView.isGone = !viewState.isToolsVisible
         binding.sizePickerImageView.setImageResource(
-            when (viewState.canvasViewState.size) {
-                ENUM_SIZE.SMALL -> {
+            when (viewState.canvasViewState.enumSize) {
+                EnumSize.SMALL -> {
                     R.drawable.ic_size_small
                 }
-                ENUM_SIZE.MEDIUM -> {
+                EnumSize.MEDIUM -> {
                     R.drawable.ic_size_medium
                 }
-                ENUM_SIZE.LARGE -> {
+                EnumSize.LARGE -> {
                     R.drawable.ic_size_large
                 }
             }
@@ -126,7 +126,7 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
         binding.palettePickerImageView.apply {
             isGone = !viewState.isToolsVisible
             setBackgroundColor(
-                resources.getColor(viewState.canvasViewState.color.value, null)
+                resources.getColor(viewState.canvasViewState.enumColor.value, null)
             )
         }
     }

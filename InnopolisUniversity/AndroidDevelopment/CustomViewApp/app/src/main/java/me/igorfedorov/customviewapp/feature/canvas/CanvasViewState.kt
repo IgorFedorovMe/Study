@@ -1,11 +1,11 @@
 package me.igorfedorov.customviewapp.feature.canvas
 
-import me.igorfedorov.customviewapp.base.canvas_state.Color
-import me.igorfedorov.customviewapp.base.canvas_state.Line
-import me.igorfedorov.customviewapp.base.canvas_state.Size
+import me.igorfedorov.customviewapp.base.canvas_state.EnumColor
+import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
+import me.igorfedorov.customviewapp.base.canvas_state.EnumSize
 
 data class CanvasViewState(
-    val color: Color,
-    val size: Size,
-    val line: Line
+    val enumColor: EnumColor,
+    val enumSize: EnumSize,
+    val enumLine: EnumLine
 )
