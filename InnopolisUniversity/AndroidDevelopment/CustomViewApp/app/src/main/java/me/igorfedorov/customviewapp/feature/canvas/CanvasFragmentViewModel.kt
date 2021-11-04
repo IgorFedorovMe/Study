@@ -80,6 +80,16 @@ class CanvasFragmentViewModel(
                 // Just as a hardcoded impl
                 toastEvent.postValue("Write / Read Permission needed")
             }
+            is UIEvent.OnImagePicked -> {
+                canvasInteractor.getBitmapFromMediaStore(event.imageUri).fold(
+                    onError = {
+
+                    },
+                    onSuccess = {
+
+                    }
+                )
+            }
         }
         return null
     }

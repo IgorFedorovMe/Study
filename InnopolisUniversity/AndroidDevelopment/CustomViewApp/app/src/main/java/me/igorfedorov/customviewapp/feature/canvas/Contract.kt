@@ -1,6 +1,7 @@
 package me.igorfedorov.customviewapp.feature.canvas
 
 import android.graphics.Bitmap
+import android.net.Uri
 import me.igorfedorov.customviewapp.ToolsItem
 import me.igorfedorov.customviewapp.base.base_view_model.Event
 import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
@@ -28,4 +29,5 @@ sealed class UIEvent : Event {
     data class OnColorClicked(val index: Int) : UIEvent()
     data class OnSizeClicked(val enumSize: EnumSize) : UIEvent()
     data class OnLineClicked(val enumLine: EnumLine) : UIEvent()
+    data class OnImagePicked(val imageUri: Uri) : UIEvent()
 }

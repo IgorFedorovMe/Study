@@ -3,4 +3,5 @@
     <string name="palette">Palette</string>
     <string name="delete_drawing">Delete Drawing</string>
     <string name="save_drawing">Save Drawing</string>
+    <string name="pick_drawing">Pick Image</string>
 </resources>

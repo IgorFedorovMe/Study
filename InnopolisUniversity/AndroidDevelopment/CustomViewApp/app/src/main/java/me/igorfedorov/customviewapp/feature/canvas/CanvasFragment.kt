@@ -1,7 +1,10 @@
 package me.igorfedorov.customviewapp.feature.canvas
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -61,6 +64,21 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
             }
         }
 
+    private val startActivityForResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val pickedImageUri = activityResult.data?.data
+            showImageAsBitmap(pickedImageUri)
+        }
+    }
+
+    private fun showImageAsBitmap(pickedImageUri: Uri?) {
+        pickedImageUri?.let {
+            viewModel.processUiEvent(UIEvent.OnImagePicked(it))
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -118,6 +136,12 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
                         else
                             PERMISSIONS.forEach { requestPermissionLauncher.launch(it) }
                     }
+                    true
+                }
+                R.id.pick_image -> {
+                    startActivityForResult.launch(Intent(Intent.ACTION_PICK).apply {
+                        type = "image/*"
+                    })
                     true
                 }
                 else -> false

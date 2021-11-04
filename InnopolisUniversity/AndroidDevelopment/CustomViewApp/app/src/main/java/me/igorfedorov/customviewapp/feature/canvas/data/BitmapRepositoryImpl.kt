@@ -22,7 +22,7 @@ class BitmapRepositoryImpl(
         }
     }
 
-    override suspend fun chooseBitmapFromMediaStore(): Bitmap {
+    override suspend fun chooseBitmapFromMediaStore(uri: Uri): Bitmap {
         TODO("Not yet implemented")
     }
 
