@@ -3,6 +3,7 @@ package me.igorfedorov.customviewapp.feature.canvas.data
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
@@ -22,8 +23,23 @@ class BitmapRepositoryImpl(
         }
     }
 
-    override suspend fun chooseBitmapFromMediaStore(uri: Uri): Bitmap {
-        TODO("Not yet implemented")
+    override suspend fun getBitmapFromMediaStore(uri: Uri): Bitmap {
+        return if (minSdk29()) {
+            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
+        } else {
+            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+        }
+//        withContext(Dispatchers.IO) {
+//            context.contentResolver.query(
+//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//                null,
+//                null,
+//                null,
+//                null
+//            )
+//        }
+//        return bitmap
+
     }
 
     private fun saveImage(bitmap: Bitmap, uri: Uri) {

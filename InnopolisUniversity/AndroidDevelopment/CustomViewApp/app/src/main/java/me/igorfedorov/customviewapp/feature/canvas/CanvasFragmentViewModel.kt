@@ -1,5 +1,6 @@
 package me.igorfedorov.customviewapp.feature.canvas
 
+import android.graphics.Bitmap
 import me.igorfedorov.customviewapp.ToolsItem
 import me.igorfedorov.customviewapp.base.base_view_model.BaseViewModel
 import me.igorfedorov.customviewapp.base.base_view_model.Event
@@ -14,6 +15,8 @@ class CanvasFragmentViewModel(
 ) : BaseViewModel<ViewState>() {
 
     val toastEvent = SingleLiveEvent<String>()
+
+    val bitmapEvent = SingleLiveEvent<Bitmap>()
 
     override fun initialViewState() = ViewState(
         colors = enumValues<EnumColor>().map { ToolsItem.ColorModel(it.value) },
@@ -86,9 +89,12 @@ class CanvasFragmentViewModel(
 
                     },
                     onSuccess = {
-
+                        processDataEvent(DataEvent.OnBitmapResumed(it))
                     }
                 )
+            }
+            is DataEvent.OnBitmapResumed -> {
+                bitmapEvent.postValue(event.bitmap)
             }
         }
         return null

@@ -7,6 +7,6 @@ interface BitmapRepository {
 
     suspend fun saveBitmapToMediaStore(bitmap: Bitmap)
 
-    suspend fun chooseBitmapFromMediaStore(uri: Uri): Bitmap
+    suspend fun getBitmapFromMediaStore(uri: Uri): Bitmap
 
 }

@@ -27,7 +27,7 @@
         android:id="@+id/pick_image"
         android:enabled="true"
         android:icon="@drawable/ic_image_search"
-        android:title="@string/save_drawing"
+        android:title="@string/pick_drawing"
         app:showAsAction="collapseActionView" />
 
 </menu>

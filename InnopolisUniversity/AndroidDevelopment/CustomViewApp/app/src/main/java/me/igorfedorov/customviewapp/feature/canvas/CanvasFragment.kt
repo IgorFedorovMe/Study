@@ -100,6 +100,10 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
         viewModel.toastEvent.observe(viewLifecycleOwner) {
             toastLong(it)
         }
+
+        viewModel.bitmapEvent.observe(viewLifecycleOwner) {
+            requireActivity().findViewById<DrawView>(R.id.drawView).setBitmap(it)
+        }
     }
 
     private fun setOnToolsClickListeners() {

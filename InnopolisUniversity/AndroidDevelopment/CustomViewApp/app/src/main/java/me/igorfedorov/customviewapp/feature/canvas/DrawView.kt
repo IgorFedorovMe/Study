@@ -100,6 +100,12 @@ class DrawView @JvmOverloads constructor(
         }
     }
 
+    fun setBitmap(bitmap: Bitmap) {
+        extraBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        extraCanvas = Canvas(extraBitmap)
+        invalidate()
+    }
+
     fun clear() {
         extraCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
         invalidate()

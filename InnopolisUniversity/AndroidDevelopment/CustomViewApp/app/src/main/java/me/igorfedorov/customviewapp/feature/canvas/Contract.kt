@@ -15,7 +15,7 @@ data class ViewState(
     val isPaletteToolsVisible: Boolean,
     val isSizeToolsVisible: Boolean,
     val isLineToolsVisible: Boolean,
-    val canvasViewState: CanvasViewState,
+    val canvasViewState: CanvasViewState
 )
 
 sealed class UIEvent : Event {
@@ -30,4 +30,8 @@ sealed class UIEvent : Event {
     data class OnSizeClicked(val enumSize: EnumSize) : UIEvent()
     data class OnLineClicked(val enumLine: EnumLine) : UIEvent()
     data class OnImagePicked(val imageUri: Uri) : UIEvent()
+}
+
+sealed class DataEvent : Event {
+    data class OnBitmapResumed(val bitmap: Bitmap) : DataEvent()
 }

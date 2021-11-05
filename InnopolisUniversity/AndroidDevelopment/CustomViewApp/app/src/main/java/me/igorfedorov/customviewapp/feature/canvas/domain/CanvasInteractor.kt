@@ -14,7 +14,7 @@ class CanvasInteractor(
     }
 
     suspend fun getBitmapFromMediaStore(uri: Uri) = attempt {
-        bitmapRepository.chooseBitmapFromMediaStore(uri)
+        bitmapRepository.getBitmapFromMediaStore(uri)
     }
 
 }
