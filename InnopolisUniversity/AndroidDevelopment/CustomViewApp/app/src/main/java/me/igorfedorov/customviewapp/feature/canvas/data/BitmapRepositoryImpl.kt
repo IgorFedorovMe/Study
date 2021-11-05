@@ -29,17 +29,6 @@ class BitmapRepositoryImpl(
         } else {
             MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
         }
-//        withContext(Dispatchers.IO) {
-//            context.contentResolver.query(
-//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                null,
-//                null,
-//                null,
-//                null
-//            )
-//        }
-//        return bitmap
-
     }
 
     private fun saveImage(bitmap: Bitmap, uri: Uri) {
