@@ -72,7 +72,7 @@ class CanvasFragmentViewModel(
             is UIEvent.OnImagePicked -> {
                 canvasInteractor.getBitmapFromMediaStore(event.imageUri).fold(
                     onError = {
-
+                        processDataEvent(DataEvent.SingleEvent.ToastEvent(R.string.image_not_picked))
                     },
                     onSuccess = {
                         processDataEvent(DataEvent.SingleEvent.OnBitmapResumed(it))
