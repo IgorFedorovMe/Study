@@ -1,6 +1,7 @@
 package me.igorfedorov.customviewapp.feature.canvas
 
 import android.graphics.Bitmap
+import me.igorfedorov.customviewapp.R
 import me.igorfedorov.customviewapp.ToolsItem
 import me.igorfedorov.customviewapp.base.base_view_model.BaseViewModel
 import me.igorfedorov.customviewapp.base.base_view_model.Event
@@ -14,7 +15,7 @@ class CanvasFragmentViewModel(
     private val canvasInteractor: CanvasInteractor
 ) : BaseViewModel<ViewState>() {
 
-    val toastEvent = SingleLiveEvent<String>()
+    val toastEvent = SingleLiveEvent<Int>()
 
     val bitmapEvent = SingleLiveEvent<Bitmap>()
 
@@ -80,8 +81,7 @@ class CanvasFragmentViewModel(
                 canvasInteractor.saveBitmapToMediaStore(event.bitmap)
             }
             is UIEvent.OnReadWritePermissionDenied -> {
-                // Just as a hardcoded impl
-                toastEvent.postValue("Write / Read Permission needed")
+                toastEvent.postValue(R.string.permission_not_granted)
             }
             is UIEvent.OnImagePicked -> {
                 canvasInteractor.getBitmapFromMediaStore(event.imageUri).fold(
