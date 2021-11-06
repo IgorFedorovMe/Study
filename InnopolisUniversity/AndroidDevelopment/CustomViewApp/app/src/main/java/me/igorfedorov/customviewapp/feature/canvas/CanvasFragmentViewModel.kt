@@ -40,22 +40,15 @@ class CanvasFragmentViewModel(
                 return previousState.copy(isToolsVisible = !previousState.isToolsVisible)
             }
             is UIEvent.OnColorClicked -> {
-                return previousState.copy(
-                    isPaletteToolsVisible = !previousState.isPaletteToolsVisible,
-                    canvasViewState = previousState.canvasViewState.copy(
-                        enumColor = EnumColor.from(
-                            previousState.colors[event.index].color
-                        )
-                    )
+                processUiEvent(UIEvent.OnPaletteToolsClicked)
+                return ViewState.canvasViewState.enumColor.set(
+                    previousState,
+                    EnumColor.from(previousState.colors[event.index].color)
                 )
             }
             is UIEvent.OnSizeClicked -> {
-                return previousState.copy(
-                    isSizeToolsVisible = !previousState.isSizeToolsVisible,
-                    canvasViewState = previousState.canvasViewState.copy(
-                        enumSize = previousState.sizes[event.enumSize.ordinal].enumSize
-                    )
-                )
+                processUiEvent(UIEvent.OnSizeToolsClicked)
+                return ViewState.canvasViewState.enumSize.set(previousState, event.enumSize)
             }
             is UIEvent.OnLineClicked -> {
                 processUiEvent(UIEvent.OnLineToolsClicked)
