@@ -11,7 +11,7 @@ import org.koin.dsl.module
 val canvasModule = module {
 
     single<BitmapRepository> {
-        BitmapRepositoryImpl(androidApplication())
+        BitmapRepositoryImpl(androidApplication().contentResolver)
     }
 
     single<CanvasInteractor> {

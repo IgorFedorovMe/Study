@@ -1,7 +1,7 @@
 package me.igorfedorov.customviewapp.feature.canvas.data
 
+import android.content.ContentResolver
 import android.content.ContentValues
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 import me.igorfedorov.customviewapp.base.utils.minSdk29
 
 class BitmapRepositoryImpl(
-    private val context: Context
+    private val contentResolver: ContentResolver
 ) : BitmapRepository {
 
     override suspend fun saveBitmapToMediaStore(bitmap: Bitmap) {
@@ -25,14 +25,14 @@ class BitmapRepositoryImpl(
 
     override suspend fun getBitmapFromMediaStore(uri: Uri): Bitmap {
         return if (minSdk29()) {
-            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
+            ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
         } else {
-            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+            MediaStore.Images.Media.getBitmap(contentResolver, uri)
         }
     }
 
     private fun saveImage(bitmap: Bitmap, uri: Uri) {
-        context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+        contentResolver.openOutputStream(uri)?.use { outputStream ->
             outputStream.use {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
             }
@@ -45,7 +45,7 @@ class BitmapRepositoryImpl(
         val imageDetails = ContentValues().apply {
             put(MediaStore.Images.Media.IS_PENDING, 0)
         }
-        context.contentResolver.update(imageUri, imageDetails, null, null)
+        contentResolver.update(imageUri, imageDetails, null, null)
     }
 
     private fun saveImageDetails(): Uri {
@@ -62,7 +62,7 @@ class BitmapRepositoryImpl(
             if (minSdk29())
                 put(MediaStore.Images.Media.IS_PENDING, 1)
         }
-        return context.contentResolver.insert(imageCollectionUri, imageDetails)!!
+        return contentResolver.insert(imageCollectionUri, imageDetails)!!
     }
 
     /*private var bitmapObserver: ContentObserver? = null
