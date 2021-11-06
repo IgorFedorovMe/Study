@@ -1,6 +1,5 @@
 package me.igorfedorov.customviewapp.feature.canvas
 
-import android.graphics.Bitmap
 import me.igorfedorov.customviewapp.R
 import me.igorfedorov.customviewapp.ToolsItem
 import me.igorfedorov.customviewapp.base.base_view_model.BaseViewModel
@@ -15,9 +14,7 @@ class CanvasFragmentViewModel(
     private val canvasInteractor: CanvasInteractor
 ) : BaseViewModel<ViewState>() {
 
-    val toastEvent = SingleLiveEvent<Int>()
-
-    val bitmapEvent = SingleLiveEvent<Bitmap>()
+    val singleEvent = SingleLiveEvent<DataEvent.SingleEvent>()
 
     override fun initialViewState() = ViewState(
         colors = enumValues<EnumColor>().map { ToolsItem.ColorModel(it.value) },
@@ -81,7 +78,7 @@ class CanvasFragmentViewModel(
                 canvasInteractor.saveBitmapToMediaStore(event.bitmap)
             }
             is UIEvent.OnReadWritePermissionDenied -> {
-                toastEvent.postValue(R.string.permission_not_granted)
+                DataEvent.SingleEvent.ToastEvent(R.string.permission_not_granted)
             }
             is UIEvent.OnImagePicked -> {
                 canvasInteractor.getBitmapFromMediaStore(event.imageUri).fold(
@@ -89,12 +86,15 @@ class CanvasFragmentViewModel(
 
                     },
                     onSuccess = {
-                        processDataEvent(DataEvent.OnBitmapResumed(it))
+                        processDataEvent(DataEvent.SingleEvent.OnBitmapResumed(it))
                     }
                 )
             }
-            is DataEvent.OnBitmapResumed -> {
-                bitmapEvent.postValue(event.bitmap)
+            is DataEvent.SingleEvent.OnBitmapResumed -> {
+                singleEvent.value = event
+            }
+            is DataEvent.SingleEvent.ToastEvent -> {
+                singleEvent.value = event
             }
         }
         return null

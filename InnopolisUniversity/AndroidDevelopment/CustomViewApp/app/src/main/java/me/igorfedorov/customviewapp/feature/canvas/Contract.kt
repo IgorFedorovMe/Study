@@ -2,6 +2,7 @@ package me.igorfedorov.customviewapp.feature.canvas
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.annotation.StringRes
 import me.igorfedorov.customviewapp.ToolsItem
 import me.igorfedorov.customviewapp.base.base_view_model.Event
 import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
@@ -33,5 +34,9 @@ sealed class UIEvent : Event {
 }
 
 sealed class DataEvent : Event {
-    data class OnBitmapResumed(val bitmap: Bitmap) : DataEvent()
+    sealed class SingleEvent : DataEvent() {
+        data class OnBitmapResumed(val bitmap: Bitmap) : SingleEvent()
+        data class ToastEvent(@StringRes val stringRes: Int) : SingleEvent()
+    }
 }
+

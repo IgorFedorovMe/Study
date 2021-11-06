@@ -97,12 +97,18 @@ class CanvasFragment : Fragment(R.layout.fragment_canvas) {
         }
         viewModel.viewState.observe(viewLifecycleOwner, ::render)
 
-        viewModel.toastEvent.observe(viewLifecycleOwner) {
-            toastLong(it)
-        }
+        viewModel.singleEvent.observe(viewLifecycleOwner, ::processSingleEvent)
+    }
 
-        viewModel.bitmapEvent.observe(viewLifecycleOwner) {
-            requireActivity().findViewById<DrawView>(R.id.drawView).setBitmap(it)
+    private fun processSingleEvent(singleEvent: DataEvent.SingleEvent) {
+        when (singleEvent) {
+            is DataEvent.SingleEvent.ToastEvent -> {
+                toastLong(singleEvent.stringRes)
+            }
+            is DataEvent.SingleEvent.OnBitmapResumed -> {
+                requireActivity().findViewById<DrawView>(R.id.drawView)
+                    .setBitmap(singleEvent.bitmap)
+            }
         }
     }
 
