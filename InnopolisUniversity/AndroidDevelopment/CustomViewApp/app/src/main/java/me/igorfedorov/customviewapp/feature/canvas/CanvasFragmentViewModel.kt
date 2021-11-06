@@ -58,12 +58,8 @@ class CanvasFragmentViewModel(
                 )
             }
             is UIEvent.OnLineClicked -> {
-                return previousState.copy(
-                    isLineToolsVisible = !previousState.isLineToolsVisible,
-                    canvasViewState = previousState.canvasViewState.copy(
-                        enumLine = previousState.lines[event.enumLine.ordinal].enumLine
-                    )
-                )
+                processUiEvent(UIEvent.OnLineToolsClicked)
+                return ViewState.canvasViewState.enumLine.set(previousState, event.enumLine)
             }
             is UIEvent.OnPaletteToolsClicked -> {
                 return previousState.copy(isPaletteToolsVisible = !previousState.isPaletteToolsVisible)

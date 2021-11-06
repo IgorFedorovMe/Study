@@ -3,11 +3,13 @@ package me.igorfedorov.customviewapp.feature.canvas
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.annotation.StringRes
+import arrow.optics.optics
 import me.igorfedorov.customviewapp.ToolsItem
 import me.igorfedorov.customviewapp.base.base_view_model.Event
 import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
 import me.igorfedorov.customviewapp.base.canvas_state.EnumSize
 
+@optics
 data class ViewState(
     val colors: List<ToolsItem.ColorModel>,
     val sizes: List<ToolsItem.SizeModel>,
@@ -17,10 +19,11 @@ data class ViewState(
     val isSizeToolsVisible: Boolean,
     val isLineToolsVisible: Boolean,
     val canvasViewState: CanvasViewState
-)
+) {
+    companion object
+}
 
 sealed class UIEvent : Event {
-    object OnToolsClicked : UIEvent()
     object OnPaletteToolsClicked : UIEvent()
     object OnSizeToolsClicked : UIEvent()
     object OnLineToolsClicked : UIEvent()
