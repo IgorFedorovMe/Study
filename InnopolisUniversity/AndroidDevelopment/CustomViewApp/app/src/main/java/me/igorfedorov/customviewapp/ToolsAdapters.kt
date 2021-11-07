@@ -14,15 +14,16 @@ fun colorAdapterDelegate(
     adapterDelegateViewBinding<ToolsItem.ColorModel, Item, ItemPaletteBinding>(
         { layoutInflater, parent -> ItemPaletteBinding.inflate(layoutInflater, parent, false) }
     ) {
-        bind {
 
+        itemView.setOnClickListener {
+            onClick(adapterPosition)
+        }
+
+        bind {
             binding.color.setColorFilter(
                 context.resources.getColor(item.color, null),
                 PorterDuff.Mode.SRC_IN
             )
-            itemView.setOnClickListener {
-                onClick(adapterPosition)
-            }
         }
     }
 
@@ -32,13 +33,13 @@ fun sizeAdapterDelegate(
     adapterDelegateViewBinding<ToolsItem.SizeModel, Item, ItemSizeBinding>(
         { layoutInflater, parent -> ItemSizeBinding.inflate(layoutInflater, parent, false) }
     ) {
+
+        itemView.setOnClickListener {
+            onClick(adapterPosition)
+        }
+
         bind {
-
             binding.size.text = item.enumSize.name
-
-            itemView.setOnClickListener {
-                onClick(adapterPosition)
-            }
         }
     }
 
@@ -48,12 +49,11 @@ fun lineAdapterDelegate(
     adapterDelegateViewBinding<ToolsItem.LineModel, Item, ItemLineBinding>(
         { layoutInflater, parent -> ItemLineBinding.inflate(layoutInflater, parent, false) }
     ) {
+
+        itemView.setOnClickListener {
+            onClick(adapterPosition)
+        }
         bind {
-
             binding.line.text = item.enumLine.name
-
-            itemView.setOnClickListener {
-                onClick(adapterPosition)
-            }
         }
     }
