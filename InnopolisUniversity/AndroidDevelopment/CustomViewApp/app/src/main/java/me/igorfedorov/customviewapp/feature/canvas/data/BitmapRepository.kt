@@ -5,7 +5,7 @@ import android.net.Uri
 
 interface BitmapRepository {
 
-    suspend fun saveBitmapToMediaStore(bitmap: Bitmap)
+    fun saveBitmapWithService(bitmap: Bitmap)
 
     suspend fun getBitmapFromMediaStore(uri: Uri): Bitmap
 

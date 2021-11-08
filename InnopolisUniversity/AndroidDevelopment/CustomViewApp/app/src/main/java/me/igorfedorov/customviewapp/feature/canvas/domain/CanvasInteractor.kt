@@ -9,8 +9,8 @@ class CanvasInteractor(
     private val bitmapRepository: BitmapRepository
 ) {
 
-    suspend fun saveBitmapToMediaStore(bitmap: Bitmap) = attempt {
-        bitmapRepository.saveBitmapToMediaStore(bitmap)
+    fun saveBitmapToMediaStore(bitmap: Bitmap) = attempt {
+        bitmapRepository.saveBitmapWithService(bitmap)
     }
 
     suspend fun getBitmapFromMediaStore(uri: Uri) = attempt {

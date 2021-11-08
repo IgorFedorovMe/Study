@@ -1,25 +1,34 @@
 package me.igorfedorov.customviewapp.feature.canvas.data
 
 import android.content.ContentResolver
-import android.content.ContentValues
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.provider.MediaStore
-import android.webkit.MimeTypeMap
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import me.igorfedorov.customviewapp.base.utils.minSdk29
+import me.igorfedorov.customviewapp.service.SaveImageService
+import org.koin.core.component.KoinComponent
+import java.io.ByteArrayOutputStream
 
 class BitmapRepositoryImpl(
-    private val contentResolver: ContentResolver
-) : BitmapRepository {
+    private val contentResolver: ContentResolver,
+    private val context: Context
+) : BitmapRepository, KoinComponent {
 
-    override suspend fun saveBitmapToMediaStore(bitmap: Bitmap) {
-        withContext(Dispatchers.IO) {
-            val imageUri = saveImageDetails()
-            saveImage(bitmap, imageUri)
-            makeImageVisible(imageUri)
+    companion object {
+        const val BUNDLE_BITMAP_BYTE_ARRAY = "BUNDLE_BITMAP_BYTE_ARRAY"
+    }
+
+    override fun saveBitmapWithService(bitmap: Bitmap) {
+        ByteArrayOutputStream().use { stream ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            val byteArray = stream.toByteArray()
+            val intent = Intent(context, SaveImageService::class.java).apply {
+                putExtra(BUNDLE_BITMAP_BYTE_ARRAY, byteArray)
+            }
+            context.startService(intent)
         }
     }
 
@@ -29,40 +38,6 @@ class BitmapRepositoryImpl(
         } else {
             MediaStore.Images.Media.getBitmap(contentResolver, uri)
         }
-    }
-
-    private fun saveImage(bitmap: Bitmap, uri: Uri) {
-        contentResolver.openOutputStream(uri)?.use { outputStream ->
-            outputStream.use {
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-            }
-        }
-    }
-
-    private fun makeImageVisible(imageUri: Uri) {
-        if (minSdk29().not()) return
-
-        val imageDetails = ContentValues().apply {
-            put(MediaStore.Images.Media.IS_PENDING, 0)
-        }
-        contentResolver.update(imageUri, imageDetails, null, null)
-    }
-
-    private fun saveImageDetails(): Uri {
-        val volume =
-            if (minSdk29()) MediaStore.VOLUME_EXTERNAL_PRIMARY else MediaStore.VOLUME_EXTERNAL
-
-        val imageCollectionUri = MediaStore.Images.Media.getContentUri(volume)
-        val fileExtension = ".png"
-        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
-        val name = System.currentTimeMillis().toString() + ".png"
-        val imageDetails = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, name)
-            put(MediaStore.Images.Media.MIME_TYPE, mimeType)
-            if (minSdk29())
-                put(MediaStore.Images.Media.IS_PENDING, 1)
-        }
-        return contentResolver.insert(imageCollectionUri, imageDetails)!!
     }
 
     /*private var bitmapObserver: ContentObserver? = null
