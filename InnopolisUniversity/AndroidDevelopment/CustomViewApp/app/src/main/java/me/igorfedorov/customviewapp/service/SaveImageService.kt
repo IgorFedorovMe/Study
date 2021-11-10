@@ -33,7 +33,7 @@ class SaveImageService : Service() {
             }
         }
 
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     private fun saveBitmapToStorage(bitmap: Bitmap) {
