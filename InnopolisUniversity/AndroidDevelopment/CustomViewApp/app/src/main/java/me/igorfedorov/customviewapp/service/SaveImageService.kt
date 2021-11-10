@@ -12,9 +12,8 @@ import android.webkit.MimeTypeMap
 import kotlinx.coroutines.*
 import me.igorfedorov.customviewapp.base.utils.minSdk29
 import me.igorfedorov.customviewapp.feature.canvas.data.BitmapRepositoryImpl.Companion.BUNDLE_BITMAP_BYTE_ARRAY
-import org.koin.core.component.KoinComponent
 
-class SaveImageService : Service(), KoinComponent {
+class SaveImageService : Service() {
 
     private val serviceJob = Job()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
