@@ -12,7 +12,6 @@ val canvasModule = module {
 
     single<BitmapRepository> {
         BitmapRepositoryImpl(
-            androidApplication().contentResolver,
             androidApplication()
         )
     }

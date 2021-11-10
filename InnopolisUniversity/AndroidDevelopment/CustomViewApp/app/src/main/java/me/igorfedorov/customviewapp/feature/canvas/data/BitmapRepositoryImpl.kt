@@ -1,6 +1,5 @@
 package me.igorfedorov.customviewapp.feature.canvas.data
 
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -9,13 +8,11 @@ import android.net.Uri
 import android.provider.MediaStore
 import me.igorfedorov.customviewapp.base.utils.minSdk29
 import me.igorfedorov.customviewapp.service.SaveImageService
-import org.koin.core.component.KoinComponent
 import java.io.ByteArrayOutputStream
 
 class BitmapRepositoryImpl(
-    private val contentResolver: ContentResolver,
     private val context: Context
-) : BitmapRepository, KoinComponent {
+) : BitmapRepository {
 
     companion object {
         const val BUNDLE_BITMAP_BYTE_ARRAY = "BUNDLE_BITMAP_BYTE_ARRAY"
@@ -34,9 +31,9 @@ class BitmapRepositoryImpl(
 
     override suspend fun getBitmapFromMediaStore(uri: Uri): Bitmap {
         return if (minSdk29()) {
-            ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
+            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
         } else {
-            MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
         }
     }
 
