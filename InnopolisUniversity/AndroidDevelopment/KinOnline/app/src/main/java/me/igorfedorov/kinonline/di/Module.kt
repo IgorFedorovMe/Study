@@ -4,7 +4,6 @@ import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.SimpleExoPlayer
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -59,7 +58,7 @@ val ciceroneModule = module {
 val exoPlayerModule = module {
 
     factory<ExoPlayer> {
-        SimpleExoPlayer.Builder(androidApplication()).build()
+        ExoPlayer.Builder(androidApplication()).build()
     }
 
 }
