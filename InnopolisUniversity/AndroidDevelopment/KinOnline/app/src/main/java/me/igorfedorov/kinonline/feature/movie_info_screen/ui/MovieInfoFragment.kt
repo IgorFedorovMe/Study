@@ -11,6 +11,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import me.igorfedorov.kinonline.MainActivity
 import me.igorfedorov.kinonline.R
 import me.igorfedorov.kinonline.base.cicerone_navigation.utils.startAnimation
+import me.igorfedorov.kinonline.base.utils.lazyFast
 import me.igorfedorov.kinonline.base.utils.loadImage
 import me.igorfedorov.kinonline.base.utils.setThrottledClickListener
 import me.igorfedorov.kinonline.databinding.FragmentMovieInfoBinding
@@ -31,7 +32,7 @@ class MovieInfoFragment : Fragment(R.layout.fragment_movie_info) {
 
     private val binding: FragmentMovieInfoBinding by viewBinding(FragmentMovieInfoBinding::bind)
 
-    private val movie: Movie by lazy {
+    private val movie: Movie by lazyFast {
         requireArguments().getParcelable(MOVIE_KEY)!!
     }
 

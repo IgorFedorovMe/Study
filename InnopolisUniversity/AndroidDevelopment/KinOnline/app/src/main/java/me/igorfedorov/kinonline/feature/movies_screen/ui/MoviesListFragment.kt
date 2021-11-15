@@ -60,7 +60,6 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
-        moviesAdapter.items = viewModel.viewState.value?.movies
     }
 
     private fun render(viewState: ViewState) {

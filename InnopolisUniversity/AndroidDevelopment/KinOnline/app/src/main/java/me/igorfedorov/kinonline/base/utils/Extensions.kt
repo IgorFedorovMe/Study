@@ -26,6 +26,13 @@ import me.igorfedorov.kinonline.base.utils.Constants.DEFAULT_THROTTLE_DELAY
 import timber.log.Timber
 import java.util.*
 
+/**
+Не работает для фрагментов, которые находятся во ViewPager2 - при свайпе с таба А на таб Б на табе А адаптер
+детачится, но не аттачится обратно.
+
+Doesn't work with fragments in ViewPager2 - swiping Tab A -> Tab B adapter detaches
+but doesn't attach back
+ */
 fun RecyclerView.setAdapterAndCleanupOnDetachFromWindow(recyclerViewAdapter: RecyclerView.Adapter<*>) {
     adapter = recyclerViewAdapter
     addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
@@ -114,6 +121,10 @@ fun EditText.textChangeFlow(): Flow<String> {
             this@textChangeFlow.removeTextChangedListener(watcher)
         }
     }
+}
+
+fun <T> lazyFast(initializer: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE) {
+    initializer()
 }
 
 fun Fragment.hideKeyboard() {
