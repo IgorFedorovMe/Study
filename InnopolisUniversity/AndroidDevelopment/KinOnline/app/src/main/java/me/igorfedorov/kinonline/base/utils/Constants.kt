@@ -4,6 +4,7 @@ object Constants {
 
     const val DEFAULT_THROTTLE_DELAY = 300L
 
-    const val VIDEO_NOTIFICATION_ID = 1
+    const val VIDEO_SERVICE_TAG = "VIDEO_SERVICE_TAG"
 
+    const val VIDEO_NOTIFICATION_ID = 1
 }

@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-parcelize'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -107,5 +108,5 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer-core:$exo_player"
     implementation "com.google.android.exoplayer:exoplayer-dash:$exo_player"
     implementation "com.google.android.exoplayer:exoplayer-ui:$exo_player"
-
+    implementation "com.google.android.exoplayer:extension-mediasession:$exo_player"
 }
