@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">CustomViewApp</string>
+    <string name="palette">Palette</string>
+    <string name="delete_drawing">Delete Drawing</string>
+    <string name="save_drawing">Save Drawing</string>
+    <string name="pick_drawing">Pick Image</string>
+    <string name="permission_not_granted">Write / Read Permission needed</string>
+    <string name="image_not_picked">Image was not picked</string>
+</resources>
