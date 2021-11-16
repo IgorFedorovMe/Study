@@ -34,9 +34,9 @@ sealed class Screens : FragmentScreen {
             get() = MOVIE_INFO_SCREEN
     }
 
-    data class PlayerFragment(val movieUrl: String) : Screens() {
+    data class PlayerFragment(val movie: Movie) : Screens() {
         override fun createFragment(factory: FragmentFactory): Fragment {
-            return VideoPlayerFragment.newInstance(movieUrl)
+            return VideoPlayerFragment.newInstance(movie)
         }
 
         override val screenKey: String

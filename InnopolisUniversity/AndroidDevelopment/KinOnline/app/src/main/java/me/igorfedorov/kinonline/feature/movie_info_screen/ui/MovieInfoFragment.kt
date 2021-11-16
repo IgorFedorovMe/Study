@@ -73,7 +73,7 @@ class MovieInfoFragment : Fragment(R.layout.fragment_movie_info) {
     private fun navigateWithAnimation(viewState: ViewState) {
         viewState.animation?.let {
             binding.circle.startAnimation(it) {
-                viewModel.processUiEvent(UIEvent.NavigateToVideoPlayerScreen(movieUrl = movie.video))
+                viewModel.processUiEvent(UIEvent.NavigateToVideoPlayerScreen(movie = movie))
             }
         }
     }

@@ -1,21 +1,26 @@
 package me.igorfedorov.kinonline.exoplayer
 
 import android.app.PendingIntent
+import android.content.Intent
+import android.os.Binder
 import android.os.Bundle
+import android.os.IBinder
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
 import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
-import com.google.android.exoplayer2.upstream.DefaultDataSource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import me.igorfedorov.kinonline.base.utils.Constants.MEDIA_ROOT_ID
+import me.igorfedorov.kinonline.base.utils.Constants.NETWORK_ERROR
+import me.igorfedorov.kinonline.base.utils.Constants.VIDEO_FILE
 import me.igorfedorov.kinonline.base.utils.Constants.VIDEO_SERVICE_TAG
+import me.igorfedorov.kinonline.exoplayer.callbacks.VideoPlaybackPreparer
 import me.igorfedorov.kinonline.exoplayer.callbacks.VideoPlayerListener
 import me.igorfedorov.kinonline.exoplayer.callbacks.VideoPlayerNotificationListener
+import me.igorfedorov.kinonline.feature.movies_screen.domain.model.Movie
 import org.koin.android.ext.android.inject
 
 class VideoService : MediaBrowserServiceCompat() {
@@ -25,9 +30,7 @@ class VideoService : MediaBrowserServiceCompat() {
             private set
     }
 
-    private val dataSourceFactory by inject<DefaultDataSource.Factory>()
-
-    private val exoPlayer by inject<ExoPlayer>()
+    val exoPlayer by inject<ExoPlayer>()
 
     private val videoSource by inject<VideoSource>()
 
@@ -79,23 +82,88 @@ class VideoService : MediaBrowserServiceCompat() {
             currentVideoDuration = exoPlayer.duration
         }
 
+        val videoPlaybackPreparer = VideoPlaybackPreparer(videoSource) {
+            currentPlayingVideo = it
+        }
 
+        mediaSessionConnector = MediaSessionConnector(mediaSession).apply {
+            setPlaybackPreparer(videoPlaybackPreparer)
+            setPlayer(exoPlayer)
+        }
+
+        videoPlayerListener = VideoPlayerListener(this)
+
+        exoPlayer.addListener(videoPlayerListener)
+
+        videoNotificationManager.showNotification(exoPlayer)
+
+    }
+
+    override fun onBind(intent: Intent?): IBinder {
+        intent?.getParcelableExtra<Movie>(VIDEO_FILE)?.let { movie ->
+            preparePlayer(movie, true)
+        }
+        return VideoServiceBinder()
+    }
+
+    override fun onUnbind(intent: Intent?): Boolean {
+        stopSelf()
+        return super.onUnbind(intent)
+    }
+
+    private fun preparePlayer(movie: Movie, playNow: Boolean) {
+        exoPlayer.apply {
+            setMediaItem(MediaItem.fromUri(movie.video))
+            prepare()
+            playWhenReady = playNow
+        }
     }
 
     override fun onGetRoot(
         clientPackageName: String,
         clientUid: Int,
         rootHints: Bundle?
-    ): BrowserRoot? {
-        TODO("Not yet implemented")
+    ): BrowserRoot {
+        return BrowserRoot(MEDIA_ROOT_ID, null)
     }
 
     override fun onLoadChildren(
         parentId: String,
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
-        TODO("Not yet implemented")
+        when (parentId) {
+            MEDIA_ROOT_ID -> {
+                val resultSent = videoSource.whenReady { isInitialized ->
+                    if (isInitialized) {
+                        result.sendResult(videoSource.asMediaItems())
+                        if (!isPlayerInitialized && videoSource.movies.isNotEmpty()) {
+                            isPlayerInitialized = true
+                        }
+                    } else {
+                        mediaSession.sendSessionEvent(NETWORK_ERROR, null)
+                        result.sendResult(null)
+                    }
+                }
+                if (!resultSent) {
+                    result.detach()
+                }
+            }
+        }
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        exoPlayer.stop()
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.cancel()
+        exoPlayer.removeListener(videoPlayerListener)
+        exoPlayer.release()
+    }
+
+    inner class VideoServiceBinder : Binder() {
+        fun getService() = this@VideoService
+    }
 }
