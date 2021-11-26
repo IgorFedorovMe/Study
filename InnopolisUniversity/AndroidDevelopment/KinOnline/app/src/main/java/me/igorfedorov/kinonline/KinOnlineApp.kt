@@ -9,6 +9,7 @@ import me.igorfedorov.kinonline.feature.movies_screen.di.moviesScreenModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 import timber.log.Timber
 
 class KinOnlineApp : Application() {
@@ -18,7 +19,7 @@ class KinOnlineApp : Application() {
         Timber.plant(Timber.DebugTree())
 
         startKoin {
-            androidLogger()
+            androidLogger(Level.ERROR)
             androidContext(this@KinOnlineApp)
             modules(
                 appModule,

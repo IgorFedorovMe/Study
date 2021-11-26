@@ -43,13 +43,13 @@ dependencies {
     def recycler_view_version = "1.2.1"
     def lifecycle_version = "2.4.0"
     def retrofit_version = "2.9.0"
-    def okhttp_version = "5.0.0-alpha.2"
-    def koin_version = "3.1.2"
+    def okhttp_version = '5.0.0-alpha.3'
+    def koin_version = '3.1.4'
     def coroutines_version = "1.5.2"
-    def adapter_delegate_version = "4.3.0"
+    def adapter_delegate_version = '4.3.1'
     def glide_version = "4.12.0"
     def timber_version = "5.0.1"
-    def view_binding_delegate_version = "1.5.1-beta01"
+    def view_binding_delegate_version = '1.5.3'
     def exo_player = "2.16.1"
 
     implementation 'androidx.core:core-ktx:1.7.0'
