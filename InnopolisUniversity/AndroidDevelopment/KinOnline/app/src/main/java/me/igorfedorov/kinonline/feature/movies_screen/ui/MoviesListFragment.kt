@@ -9,6 +9,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import me.igorfedorov.kinonline.MainActivity
 import me.igorfedorov.kinonline.R
+import me.igorfedorov.kinonline.base.utils.lazyFast
 import me.igorfedorov.kinonline.base.utils.setAdapterAndCleanupOnDetachFromWindow
 import me.igorfedorov.kinonline.base.utils.setData
 import me.igorfedorov.kinonline.databinding.FragmentMoviesListBinding
@@ -32,7 +33,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private var viewForTransition: View? = null
 
-    private val moviesAdapter: MoviesAdapter by lazy {
+    private val moviesAdapter: MoviesAdapter by lazyFast {
         MoviesAdapter(
             onItemClick = { movie, layoutPosition ->
                 this.movie = movie
