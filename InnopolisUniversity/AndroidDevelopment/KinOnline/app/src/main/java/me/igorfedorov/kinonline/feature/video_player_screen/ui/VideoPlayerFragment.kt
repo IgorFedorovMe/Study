@@ -4,9 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.os.Bundle
 import android.os.IBinder
-import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -55,15 +53,10 @@ class VideoPlayerFragment : Fragment(R.layout.fragment_video_player) {
 
     override fun onResume() {
         super.onResume()
-        hideSystemUi()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         val intent = Intent(requireContext(), VideoService::class.java)
         intent.putExtra(VIDEO_FILE, movie)
         requireActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        hideSystemUi()
     }
 
     override fun onPause() {
