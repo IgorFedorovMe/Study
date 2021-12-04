@@ -45,6 +45,10 @@ class VideoNotificationManager(
         notificationManager.setPlayer(player)
     }
 
+    fun hideNotification() {
+        notificationManager.setPlayer(null)
+    }
+
     private inner class DescriptionAdapter(private val mediaController: MediaControllerCompat) :
         PlayerNotificationManager.MediaDescriptionAdapter {
         override fun getCurrentContentTitle(player: Player): CharSequence {

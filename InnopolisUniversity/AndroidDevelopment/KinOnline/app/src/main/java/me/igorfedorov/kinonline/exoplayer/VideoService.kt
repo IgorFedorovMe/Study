@@ -15,7 +15,7 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import kotlinx.coroutines.*
 import me.igorfedorov.kinonline.base.utils.Constants.MEDIA_ROOT_ID
 import me.igorfedorov.kinonline.base.utils.Constants.NETWORK_ERROR
-import me.igorfedorov.kinonline.base.utils.Constants.VIDEO_FILE
+import me.igorfedorov.kinonline.base.utils.Constants.VIDEO_FILE_KEY
 import me.igorfedorov.kinonline.base.utils.Constants.VIDEO_SERVICE_TAG
 import me.igorfedorov.kinonline.exoplayer.callbacks.VideoPlaybackPreparer
 import me.igorfedorov.kinonline.exoplayer.callbacks.VideoPlayerListener
@@ -100,7 +100,7 @@ class VideoService : MediaBrowserServiceCompat() {
     }
 
     override fun onBind(intent: Intent?): IBinder {
-        intent?.getParcelableExtra<Movie>(VIDEO_FILE)?.let { movie ->
+        intent?.getParcelableExtra<Movie>(VIDEO_FILE_KEY)?.let { movie ->
             preparePlayer(movie, true)
         }
         return VideoServiceBinder()
@@ -108,6 +108,7 @@ class VideoService : MediaBrowserServiceCompat() {
 
     override fun onUnbind(intent: Intent?): Boolean {
         stopSelf()
+        videoNotificationManager.hideNotification()
         return super.onUnbind(intent)
     }
 

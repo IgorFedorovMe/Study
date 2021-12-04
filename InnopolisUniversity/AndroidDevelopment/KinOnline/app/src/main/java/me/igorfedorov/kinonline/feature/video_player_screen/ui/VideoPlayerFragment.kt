@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import me.igorfedorov.kinonline.R
-import me.igorfedorov.kinonline.base.utils.Constants.VIDEO_FILE
+import me.igorfedorov.kinonline.base.utils.Constants.VIDEO_FILE_KEY
 import me.igorfedorov.kinonline.databinding.FragmentVideoPlayerBinding
 import me.igorfedorov.kinonline.exoplayer.VideoService
 import me.igorfedorov.kinonline.feature.movies_screen.domain.model.Movie
@@ -54,7 +54,7 @@ class VideoPlayerFragment : Fragment(R.layout.fragment_video_player) {
     override fun onResume() {
         super.onResume()
         val intent = Intent(requireContext(), VideoService::class.java)
-        intent.putExtra(VIDEO_FILE, movie)
+        intent.putExtra(VIDEO_FILE_KEY, movie)
         requireActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE)
         hideSystemUi()
     }
