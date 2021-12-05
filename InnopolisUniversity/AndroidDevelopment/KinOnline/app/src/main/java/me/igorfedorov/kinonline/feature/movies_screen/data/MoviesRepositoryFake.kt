@@ -1,6 +1,5 @@
-package me.igorfedorov.kinonline.movies_screen_tests
+package me.igorfedorov.kinonline.feature.movies_screen.data
 
-import me.igorfedorov.kinonline.feature.movies_screen.data.MoviesRepository
 import me.igorfedorov.kinonline.feature.movies_screen.domain.model.Genre
 import me.igorfedorov.kinonline.feature.movies_screen.domain.model.Movie
 

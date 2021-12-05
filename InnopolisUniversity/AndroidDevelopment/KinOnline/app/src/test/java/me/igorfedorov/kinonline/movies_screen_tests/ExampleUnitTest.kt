@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import me.igorfedorov.kinonline.feature.movies_screen.data.MoviesRepositoryFake
 import me.igorfedorov.kinonline.feature.movies_screen.domain.MoviesInteractor
 import me.igorfedorov.kinonline.feature.movies_screen.domain.model.Genre
 import me.igorfedorov.kinonline.feature.movies_screen.domain.model.Movie
