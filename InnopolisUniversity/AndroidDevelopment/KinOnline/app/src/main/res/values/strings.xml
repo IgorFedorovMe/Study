@@ -3,4 +3,7 @@
     <string name="play_movie">Play Movie</string>
     <string name="movie_poster">Movie Poster</string>
     <string name="watch_movie">Watch Movie</string>
+    <string name="retry">Retry</string>
+    <string name="video_channel_id">Video</string>
+    <string name="channel_name">Video Channel</string>
 </resources>

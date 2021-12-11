@@ -8,18 +8,4 @@ data class WeatherMain(
     val name: String,
     val weatherWind: WeatherWind,
     val weatherSystem: WeatherSystem
-) {
-
-    companion object {
-        val empty = WeatherMain(
-            coordinates = Coordinates.empty,
-            weather = emptyList(),
-            base = "",
-            main = Main.empty,
-            name = "",
-            weatherWind = WeatherWind.empty,
-            weatherSystem = WeatherSystem.empty
-        )
-    }
-
-}
+)

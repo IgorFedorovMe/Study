@@ -5,73 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
+    <me.igorfedorov.customviewapp.feature.canvas.DrawView
+        android:id="@+id/drawView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <me.igorfedorov.customviewapp.feature.canvas.DrawView
-        android:id="@+id/drawView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/line"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <include
         android:id="@+id/palette"
         layout="@layout/view_tools"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/palettePickerImageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/palettePickerImageView" />
-
-    <include
-        android:id="@+id/size"
-        layout="@layout/view_tools"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/sizePickerImageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/sizePickerImageView" />
-
-    <include
-        android:id="@+id/line"
-        layout="@layout/view_tools"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/linePickerImageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/linePickerImageView" />
-
-    <ImageView
-        android:id="@+id/palettePickerImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/sizePickerImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/palettePickerImageView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_size_small" />
-
-    <ImageView
-        android:id="@+id/linePickerImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/sizePickerImageView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_mode_edit_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

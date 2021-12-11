@@ -6,16 +6,21 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.snackbar.Snackbar
+import me.igorfedorov.kinonline.MainActivity
 import me.igorfedorov.kinonline.R
+import me.igorfedorov.kinonline.base.utils.lazyFast
 import me.igorfedorov.kinonline.base.utils.setAdapterAndCleanupOnDetachFromWindow
 import me.igorfedorov.kinonline.base.utils.setData
 import me.igorfedorov.kinonline.databinding.FragmentMoviesListBinding
+import me.igorfedorov.kinonline.feature.movies_screen.domain.model.Movie
 import me.igorfedorov.kinonline.feature.movies_screen.ui.adapter.MoviesAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     companion object {
+        const val BUNDLE_MOVIE_KEY = "BUNDLE_MOVIE_KEY"
 
         fun newInstance() = MoviesListFragment()
     }
@@ -24,11 +29,20 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private val viewModel: MoviesListViewModel by viewModel()
 
-    private val moviesAdapter: MoviesAdapter by lazy {
+    private var movie: Movie? = null
+
+    private var viewForTransition: View? = null
+
+    private val moviesAdapter: MoviesAdapter by lazyFast {
         MoviesAdapter(
             onItemClick = { movie, layoutPosition ->
+                this.movie = movie
                 binding.moviesListRecyclerView.scrollToPosition(layoutPosition)
                 viewModel.processUiEvent(UIEvent.OnMovieClick(movie))
+            },
+            onViewInflated = {
+                viewForTransition = it
+                it.transitionName = MainActivity.MOVIE_POSTER_TRANSITION
             }
         )
     }
@@ -47,7 +61,6 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
-        moviesAdapter.items = viewModel.viewState.value?.movies
     }
 
     private fun render(viewState: ViewState) {
@@ -55,14 +68,40 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         setDataToAdapter(viewState)
 
         updateProgressBar(viewState)
+
+        renderError(viewState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        movie?.let { outState.putParcelable(BUNDLE_MOVIE_KEY, it) }
+
     }
 
     private fun updateProgressBar(viewState: ViewState) {
         binding.progressBar.isVisible = viewState.isLoading
     }
 
+    private fun renderError(viewState: ViewState) {
+        viewState.errorMessage?.let {
+            Snackbar.make(
+                requireContext(),
+                binding.moviesListFragment,
+                it,
+                Snackbar.LENGTH_INDEFINITE
+            )
+                .setAction(R.string.retry) {
+                    viewModel.processUiEvent(UIEvent.GetMovies)
+                }
+                .show()
+        }
+    }
+
     private fun setDataToAdapter(viewState: ViewState) {
         moviesAdapter.setData(viewState.movies)
     }
+
+    val sharedView
+        get() = viewForTransition
 
 }

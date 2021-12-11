@@ -50,7 +50,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/citiesRecyclerView"
         app:layout_constraintStart_toStartOf="@+id/citiesRecyclerView"
         app:layout_constraintTop_toTopOf="@+id/citiesRecyclerView" />

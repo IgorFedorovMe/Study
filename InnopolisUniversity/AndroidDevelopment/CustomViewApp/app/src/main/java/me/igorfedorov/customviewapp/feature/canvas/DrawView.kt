@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import me.igorfedorov.customviewapp.R
-import me.igorfedorov.customviewapp.base.canvas_state.EnumLine
 import kotlin.math.abs
 
 class DrawView @JvmOverloads constructor(
@@ -51,19 +50,31 @@ class DrawView @JvmOverloads constructor(
         strokeWidth = STROKE_WIDTH // default: Hairline-width (really thin)
     }
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        canvas.drawBitmap(extraBitmap, 0f, 0f, null)
-        canvas.drawPath(drawing, paint)
-        canvas.drawPath(curPath, paint)
+    /*fun render(state: CanvasViewState) {
+        drawColor = ResourcesCompat.getColor(resources, state.color.value, null)
+        paint.color = drawColor
+        paint.strokeWidth = state.size.value.toFloat()
+        if (state.tools == TOOLS.DASH) {
+            paint.pathEffect = DashPathEffect(
+                floatArrayOf(
+                    state.size.value.toFloat() * 2,
+                    state.size.value.toFloat() * 2,
+                    state.size.value.toFloat() * 2,
+                    state.size.value.toFloat() * 2
+                ), 0f
+            )
+        } else {
+            paint.pathEffect = null
+        }
+    }*/
+
+    fun clear() {
+        extraCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+        invalidate()
     }
 
-    override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
-        super.onSizeChanged(width, height, oldWidth, oldHeight)
-        // Changed extraBitmap.recycle() to return for not to redraw onSizeChanged
-        if (::extraBitmap.isInitialized) return
-        extraBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        extraCanvas = Canvas(extraBitmap)
+    fun setOnClickField(onClickField: () -> Unit) {
+        onClick = onClickField
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -76,43 +87,6 @@ class DrawView @JvmOverloads constructor(
             MotionEvent.ACTION_UP -> touchUp()
         }
         return true
-    }
-
-    fun render(state: CanvasViewState) {
-        drawColor = ResourcesCompat.getColor(resources, state.enumColor.value, null)
-        paint.color = drawColor
-        paint.strokeWidth = state.enumSize.value.toFloat()
-        // When expression to simplify adding new Line states
-        when (state.enumLine) {
-            EnumLine.BROKEN -> {
-                paint.pathEffect = DashPathEffect(
-                    floatArrayOf(
-                        state.enumSize.value.toFloat() * 2,
-                        state.enumSize.value.toFloat() * 2,
-                        state.enumSize.value.toFloat() * 2,
-                        state.enumSize.value.toFloat() * 2
-                    ), 0f
-                )
-            }
-            EnumLine.CONTINUOUS -> {
-                paint.pathEffect = null
-            }
-        }
-    }
-
-    fun setBitmap(bitmap: Bitmap) {
-        extraBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        extraCanvas = Canvas(extraBitmap)
-        invalidate()
-    }
-
-    fun clear() {
-        extraCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-        invalidate()
-    }
-
-    fun setOnClickField(onClickField: () -> Unit) {
-        onClick = onClickField
     }
 
     private fun restartCurrentXY() {
@@ -147,5 +121,19 @@ class DrawView @JvmOverloads constructor(
     private fun touchUp() {
         drawing.addPath(curPath)
         curPath.reset()
+    }
+
+    override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight)
+        if (::extraBitmap.isInitialized) extraBitmap.recycle()
+        extraBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        extraCanvas = Canvas(extraBitmap)
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvas.drawBitmap(extraBitmap, 0f, 0f, null)
+        canvas.drawPath(drawing, paint)
+        canvas.drawPath(curPath, paint)
     }
 }

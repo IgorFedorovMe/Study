@@ -2,12 +2,11 @@ package me.igorfedorov.customviewapp
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
-import me.igorfedorov.customviewapp.base.utils.setAdapterAndCleanupOnDetachFromWindow
-import me.igorfedorov.customviewapp.base.utils.setData
+import me.igorfedorov.customviewapp.databinding.ViewToolsBinding
 
 class ToolsLayout @JvmOverloads constructor(
     context: Context,
@@ -15,33 +14,14 @@ class ToolsLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : CardView(context, attrs, defStyleAttr) {
 
-    private var onClick: (Int) -> Unit = {}
-
-    private val adapterDelegate = ListDelegationAdapter(
-        colorAdapterDelegate {
-            onClick(it)
-        },
-        sizeAdapterDelegate {
-            onClick(it)
-        },
-        lineAdapterDelegate {
-            onClick(it)
-        }
-    )
+    private val binding: ViewToolsBinding =
+        ViewToolsBinding.inflate(LayoutInflater.from(context), this, true)
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        findViewById<RecyclerView>(R.id.toolsRecyclerView).apply {
-            setAdapterAndCleanupOnDetachFromWindow(adapterDelegate)
+        binding.toolsRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         }
     }
 
-    fun render(listToolsItem: List<ToolsItem>) {
-        adapterDelegate.setData(listToolsItem)
-    }
-
-    fun setOnClickListener(onClick: (Int) -> Unit) {
-        this.onClick = onClick
-    }
 }

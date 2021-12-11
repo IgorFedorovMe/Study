@@ -7,16 +7,4 @@ data class WeatherSystem(
     val country: String,
     val sunrise: Int,
     val sunset: Int
-) {
-
-    companion object {
-        val empty = WeatherSystem(
-            type = 0,
-            id = 0,
-            message = 0.0,
-            country = "",
-            sunrise = 0,
-            sunset = 0
-        )
-    }
-}
+)

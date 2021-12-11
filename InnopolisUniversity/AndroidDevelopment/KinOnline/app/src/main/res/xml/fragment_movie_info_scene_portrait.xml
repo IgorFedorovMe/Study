@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:autoTransition="animateToEnd"
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000" />
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/moviePosterImageView"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_margin="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="32dp"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+            android:id="@+id/play_movie_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="64dp"
+            android:layout_marginBottom="64dp"
+            android:alpha="0"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent" />
+        <Constraint
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:alpha="0"
+            motion:layout_constraintStart_toStartOf="@+id/moviePosterImageView"
+            motion:layout_constraintTop_toBottomOf="@+id/moviePosterImageView" />
+        <Constraint
+            android:id="@+id/circle"
+            android:layout_width="128dp"
+            android:layout_height="56dp"
+            android:visibility="invisible"
+            motion:layout_constraintBottom_toBottomOf="@+id/playMovieFab"
+            motion:layout_constraintEnd_toEndOf="@+id/playMovieFab" />
+        <Constraint
+            android:id="@+id/descriptionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@+id/moviePosterImageView" />
+        <Constraint
+            android:id="@+id/moviePosterImageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+            android:id="@+id/descriptionTextView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            motion:layout_constraintBottom_toTopOf="@+id/playMovieFab"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="@+id/titleTextView"
+            motion:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+        <Constraint
+            android:id="@+id/view"
+            motion:layout_constraintEnd_toEndOf="@+id/playMovieFab" />
+        <Constraint
+            android:id="@+id/circle"
+            android:layout_width="128dp"
+            android:layout_height="56dp"
+            android:visibility="invisible"
+            motion:layout_constraintBottom_toBottomOf="@+id/playMovieFab"
+            motion:layout_constraintEnd_toEndOf="@+id/playMovieFab" />
+    </ConstraintSet>
+</MotionScene>

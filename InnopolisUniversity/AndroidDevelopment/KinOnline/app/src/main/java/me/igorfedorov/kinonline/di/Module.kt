@@ -4,7 +4,9 @@ import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.SimpleExoPlayer
+import me.igorfedorov.kinonline.exoplayer.VideoService
+import me.igorfedorov.kinonline.exoplayer.VideoSource
+import me.igorfedorov.kinonline.feature.movies_screen.data.MoviesRepository
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -34,6 +36,10 @@ val appModule = module {
             .build()
     }
 
+    single<VideoService> {
+        VideoService()
+    }
+
 }
 
 val ciceroneModule = module {
@@ -58,8 +64,12 @@ val ciceroneModule = module {
 
 val exoPlayerModule = module {
 
-    single<ExoPlayer> {
-        SimpleExoPlayer.Builder(androidApplication()).build()
+    factory<ExoPlayer> {
+        ExoPlayer.Builder(androidApplication()).build()
+    }
+
+    factory<VideoSource> {
+        VideoSource(moviesRepository = get<MoviesRepository>())
     }
 
 }

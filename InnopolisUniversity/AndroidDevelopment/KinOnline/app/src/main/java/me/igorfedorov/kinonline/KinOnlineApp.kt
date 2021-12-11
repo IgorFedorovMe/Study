@@ -6,10 +6,10 @@ import me.igorfedorov.kinonline.di.ciceroneModule
 import me.igorfedorov.kinonline.di.exoPlayerModule
 import me.igorfedorov.kinonline.feature.movie_info_screen.di.movieInfoModule
 import me.igorfedorov.kinonline.feature.movies_screen.di.moviesScreenModule
-import me.igorfedorov.kinonline.feature.video_player_screen.di.videoPlayerModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 import timber.log.Timber
 
 class KinOnlineApp : Application() {
@@ -19,15 +19,14 @@ class KinOnlineApp : Application() {
         Timber.plant(Timber.DebugTree())
 
         startKoin {
-            androidLogger()
+            androidLogger(Level.ERROR)
             androidContext(this@KinOnlineApp)
             modules(
                 appModule,
                 moviesScreenModule,
                 ciceroneModule,
                 exoPlayerModule,
-                movieInfoModule,
-                videoPlayerModule
+                movieInfoModule
             )
         }
     }

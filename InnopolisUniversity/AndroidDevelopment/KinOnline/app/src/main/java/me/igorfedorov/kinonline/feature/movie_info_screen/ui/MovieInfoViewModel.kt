@@ -9,12 +9,18 @@ class MovieInfoViewModel(
     private val router: Router
 ) : BaseViewModel<ViewState>() {
 
-    override fun initialViewState(): ViewState = ViewState()
+    override fun initialViewState(): ViewState = ViewState(
+        animation = null
+    )
 
     override suspend fun reduce(event: Event, previousState: ViewState): ViewState? {
         when (event) {
             is UIEvent.OnPlayButtonCLick -> {
-                router.navigateTo(Screens.playerFragment(event.movieUrl))
+                return previousState.copy(animation = event.animation)
+            }
+            is UIEvent.NavigateToVideoPlayerScreen -> {
+                router.navigateTo(Screens.PlayerFragment(event.movie))
+                return previousState.copy(animation = null)
             }
         }
         return null
