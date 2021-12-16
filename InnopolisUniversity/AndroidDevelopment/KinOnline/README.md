@@ -28,3 +28,5 @@
 
 KinOnline app flow<br>
 ![](readmeGIFs/KinOnlineFlow.gif)
+
+by Fedorov Igor Sergeevich
