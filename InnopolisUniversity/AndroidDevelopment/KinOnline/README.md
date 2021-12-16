@@ -30,3 +30,4 @@ KinOnline app flow<br>
 ![](readmeGIFs/KinOnlineFlow.gif)
 
 by Fedorov Igor Sergeevich
+https://github.com/IgorFedorovMe/Study/blob/main/InnopolisUniversity/AndroidDevelopment/KinOnline/README.md
